@@ -4,7 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
+  <!-- ฟ้อนต์ Prompt -->
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
   margin: 0;
@@ -12,102 +21,1492 @@
   font-family: "Prompt", sans-serif;
   display: flex;
 }
+/* =================================== กราฟ ================================== */
+.chart-container {
+  width: 100%;
+  margin-bottom: 40px;
+}
 
-/* Sidebar */
-.sidebar {
-  width: 240px;              /* ✅ ขยายความกว้าง */
-  height: 100vh;
-  background: #343a40;
-  color: white;
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+  .chart-section {
+    margin: 20px 0;
+  }
+
+  .chart-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 25px;
+  }
+
+  .chart-box {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .chart-box h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  /* ✅ ปรับเฉพาะส่วนนี้ใหม่ */
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 350px !important;
+    image-rendering: crisp-edges;
+    transform: translateZ(0);
+  }
+  .chart-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 25px;
+}
+
+.symptom-right {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  position: fixed;           /* ✅ ล็อก sidebar ไว้ */
+  justify-content: center;
+}
+
+.symptom-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.symptom-row canvas {
+  max-width: 200px;
+  height: 200px !important;
+}
+.small-bar {
+  flex: 1; /* ขนาดพอๆ กัน */
+}
+
+.small-chart {
+  flex: 0.8; /* วงกลมเล็กลงนิดให้สมดุล */
+}
+
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.chart-box {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 15px;
+  text-align: center;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.small-chart canvas {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  aspect-ratio: 1 / 1; /* รักษาสัดส่วนวงกลม */
+  margin: auto;
+}
+
+.chart-box {
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+/* ป้องกัน div กราฟทับ legend */
+.chart-box {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.chart-box canvas {
+  position: relative;
+  z-index: 1;
+}
+
+/* ให้ legend อยู่บนสุดแน่ๆ */
+.chartjs-legend,
+.chartjs-legend ul,
+.chartjs-legend li {
+  position: relative;
+  z-index: 10;
+}
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+/* 🎯 ตั้งค่าพื้นฐานของทั้งหน้าเว็บ */
+body {
+  margin: 0; /* ลบระยะขอบนอกของหน้าเว็บ */
+  padding: 0; /* ลบระยะขอบในของ body */
+  font-family: "Prompt", sans-serif; /* ใช้ฟอนต์ภาษาไทยดูเรียบหรู */
+  display: flex; /* ทำให้ Sidebar และ Content อยู่ในแนวนอน */
+  background: linear-gradient(135deg, #1f1f1f, #2c3e50); /* สีพื้นหลังเทาอ่อน */
+  color: #f5f5f5;
+}
+
+/* ====================== Sidebar (แถบเมนูด้านซ้าย) ====================== */
+/* ====================== Sidebar (มินิมอล + กรอบยืดลง) ====================== */
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1c1f26 0%, #222831 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px;
+  position: fixed;
   top: 0;
   left: 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+  font-family: "Prompt", sans-serif;
 }
+
+/* หัวข้อเมนูหลัก */
+.sidebar h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00adb5;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+/* ปุ่มหลัก (เช่น Home Troubleshoot Report) */
 .sidebar a {
-  color: white;
+  color: #d1d1d1;
   text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 5px;
-  margin-bottom: 4px;
-  display: block;
-  font-size: 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
 }
+
+/* Hover เมนูหลัก */
 .sidebar a:hover {
-  background: #495057;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transform: translateX(3px);
+  border-left: 5px solid #FFC107;
+  transition: all 0.3 ease;
 }
 
-/* Content */
-.content {
-  margin-left: 240px;        /* ✅ เว้นที่ให้ sidebar */
-  padding: 20px;
-  flex: 1;
-  overflow-x: auto;          /* ✅ ตารางกว้างเลื่อนข้างได้ */
+.sidebar ul {
+  margin: 0;
+  padding: 15px 18px;
+}
+.sidebar li {
+  margin: -6px;
+  padding: 12px 12px;
+  list-style: none;
 }
 
-
-
-/* Table */
-.table-responsive {
-  overflow-x: hidden;        /* ปิดเลื่อนซ้ายขวา */
-  overflow-y: auto;          /* เลื่อนขึ้นลงได้ */
-  max-height: 80vh;          /* กำหนดความสูงของตาราง */
+/* 🔻 กรอบ submenu เวลากด */
+.submenu-wrapper {
+  /*background: rgba(0, 0, 0, 0.2);*/
+  background: rgba(255, 255, 255, 0.10);
+  border: 1.5px solid #FFB300;
+  border-radius: 14px;
+  margin: 0;
+  padding: 4px 10px;
+  box-shadow: 0 3px 10px rgba(0, 173, 181, 0.08);
+  transition: all 0.35s ease;
+  overflow: hidden;
 }
-.table {
-  max-width: 100%;
-  font-size: 13px;           /* ✅ ขนาดเล็กลง */
-  table-layout: fixed;       /* บังคับตาราง ความกว้างตามกำหนด */
-  word-wrap: break-word;     /* ตัดคำเมื่อ ข้อความยาวเกิน */
-  border-collapse: collapse; /* รวมเส้นขอบ */
-}
-.table th, .table td {
-  padding: 10px;
-  text-align: center;
-  vertical-align: middle;
-  height: 50px;              /* ทุกช่องสูงเท่ากัน */
-  overflow: hidden;          /* ซ่อนถ้าข้อความเกิน */
-  white-space: nowrap;       /* ไม่ตัดบรรทัด */
-  text-overflow: ellipsis;   /* ใส่ ... ถ้าเกิน */ 
-}
-/* 🔹 กำหนดความกว้างของแต่ละคอลัมน์ */
-.table th:nth-child(1), .table td:nth-child(1) { width: 15%; } /* Timestamp */
-.table th:nth-child(2), .table td:nth-child(2) { width: 12%; } /* Hospital */
-.table th:nth-child(3), .table td:nth-child(3) { width: 8%; } /* CustomerName */
-.table th:nth-child(4), .table td:nth-child(4) { width: 15%; } /* Email */
-.table th:nth-child(5), .table td:nth-child(5) { width: 8%; } /* Model */
-.table th:nth-child(6), .table td:nth-child(6) { width: 8%; } /* SN */
-.table th:nth-child(7), .table td:nth-child(7) { width: 18%; text-align:left; white-space: normal;} /* Symptom */
-.table th:nth-child(8), .table td:nth-child(8) { width: 8%; } /* Phone */
 
-.hidden {
+.submenu-wrapper:last-of-type {
+  margin-bottom: 8px;
+}
+
+.submenu-wrapper:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(230, 230, 230, 0.6);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+/* หัวข้อเครื่อง (Infusion Pump, Syringe Pump ฯลฯ) */
+.submenu-title {
+  color: #f0f0f0;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.submenu-title:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15);
+  transform: translateX(3px);
+}
+
+/* ลูกศรขวา */
+.arrow {
+  font-size: 16px;
+  color: #aaa;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.arrow.rotate {
+  transform: rotate(90deg);
+  color: #FFB300;
+}
+
+/* กรอบรุ่นที่เด้งออกมา */
+.submenu-box {
+  background: linear-gradient(135deg, #FFD54F, #FFB300);
+  border: 2px solid #FFC107;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 6px 0 4px 15px;
+  box-shadow: 0 3px 8px rgba(255, 179, 0, 0.4);
+  transition: all 0.35s ease;
+  overflow: hidden;
+  position: relative;
+  top: 6px;
+}
+
+.submenu-title:hover {
+
+  transform: translateY(-2px);
+}
+
+.submenu-box.hidden {
   display: none;
 }
 
-/* Troubleshoot */
-.submenu-items {
-  list-style: none;
-  margin: 0;
-  padding-left: 15px;
-}
-.submenu-items li {
-  cursor: pointer;
-  padding: 2px 30px;
-}
-.submenu-items li:hover {
-  background: #e4467b;
-  color: white;
-}
-
-#troubleshootMenu li {
-  margin: 4px 0;
-}
-
-#resultMessage {
-  margin-top: 15px;
-  padding: 10px;
+/* รายการรุ่น */
+.submenu-box li {
+  color: #222;
+  font-weight: 500;
+  padding: 6px 12px;
+  font-size: 15px;
   border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.submenu-box li:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #222;
+  transform: translateX(6px);
+}
+
+/* ====================== พื้นที่เนื้อหาหลัก (Content) ====================== */
+.content {
+  min-height: 100vh;
+  margin-left: 300px; /* เว้นที่เท่ากับความกว้าง Sidebar */
+  flex: 1;
+  padding: 40px; /* เว้นระยะรอบเนื้อหา */
+  display: flex;
+  justify-content: center; /* จัดเนื้อหาให้อยู่กลางแนวนอน */
+}
+
+/* ทุกองค์ประกอบภายใน Content จะไม่เต็มจอเกินไป */
+.content > * {
+  width: 190%; /* กินพื้นที่ 90% ของพื้นที่ content */
+  max-width: 2000px; /* จำกัดความกว้างสูงสุด */
+}
+
+/* ================================ กรอบของแต่ละหน้า (.page) ================================ */
+.page {
+  background: #fff; /* พื้นหลังขาว */
+  backdrop-filter: blur(10px);
+  padding: 35px 40px; /* ระยะขอบใน */
+  border-radius: 15px; /* มุมโค้งมน */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* เงาอ่อนๆ */
+  color: #f5f5f5;
+  transition: all 0.3s ease;
+}
+
+.page:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* ====================== หน้า Home (เฉพาะลูกค้า) ====================== */
+#home-customer {
+  display: flex;
+  justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+  align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+  height: 100%; /* สูงเท่าพื้นที่ content */
+  padding: 115px 0; /* ระยะบนล่าง */
+  background: linear-gradient(135deg, #4aeed8, #293133);
+}
+
+/* กล่องหลักในหน้า Home */
+#home-customer .home-box {
+  background: #fff; /* พื้นหลังขาว */
+  border-radius: 18px; /* มุมโค้งสวย */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* เงานุ่มๆ */
+  padding: 55px 60px; /* ช่องว่างภายใน */
+  width: 90%; /* ใช้พื้นที่ 85% ของ content */
+  max-width: 900px; /* จำกัดความกว้างสูงสุด */
+  text-align: center; /* จัดข้อความให้อยู่กลาง */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* หัวข้อหน้า Home */
+#home-customer h2 {
+  font-size: 2.5rem;    /* หัวข้อใหญ่ขึ้น */
+  color: #004d55;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* คำอธิบายใต้หัวข้อหน้า Home */
+#home-customer p {
+  font-size: 1.1rem;    /* ตัวอักษรเล็ก ๆ ใหญ่ขึ้น */
+  color: #2f2f2f;
+  font-weight: 400;
+  margin-bottom: 35px;
+}
+
+/* 🎯 ปรับขนาดและระยะโดยรวมของหน้า Home */
+#home-customer .home-box {
+  padding: 55px 60px;   /* เพิ่มความกว้างของกรอบ */
+  width: 90%;
+  max-width: 950px;     /* กล่องใหญ่ขึ้นนิดหน่อย */
+}
+
+/* ====================== ปุ่มทั่วไป ====================== */
+button, .btn, .btn-primary {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+}
+
+/* เอฟเฟกต์เวลาชี้เมาส์ */
+button:hover, .btn:hover {
+  transform: translateY(-1px); /* ขยับขึ้นเล็กน้อย */
+  opacity: 0.95;
+}
+
+/* ปุ่มเฉพาะหน้า Home */
+/* ====================== ปุ่มพร้อมเอฟเฟกต์ ====================== */
+#home-customer .btn {
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 14px 0;
+  width: 240px;
+  transition: all 0.3s ease;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* ปุ่มในหน้า Home ให้อยู่บรรทัดเดียวกัน */
+#home-customer .d-grid {
+  display: flex !important; /* เปลี่ยนจาก grid เป็น flex */
+  justify-content: center;  /* จัดให้อยู่ตรงกลาง */
+  gap: 25px; /* ระยะห่างระหว่างปุ่ม */
+}
+
+#home-customer .d-grid .btn {
+  width: 370px; /* กำหนดความกว้างเท่ากัน */
+}
+
+/* ปุ่มสีเขียว (Troubleshoot) */
+#home-customer .btn-success {
+  background: linear-gradient(135deg, #00b894, #00997a);
+  border: none;
+}
+#home-customer .btn-success:hover {
+  background: linear-gradient(135deg, #55efc4, #00b894);
+  color: #222;
+  box-shadow: 0 6px 16px rgba(0, 184, 148, 0.4);
+  transform: translateY(-3px);
+}
+
+/* ปุ่มสีน้ำเงิน (Report) */
+#home-customer .btn-primary {
+  background: linear-gradient(135deg, #00adb5, #007a80);
+  border: none;
+}
+#home-customer .btn-primary:hover {
+  background: linear-gradient(135deg, #00e5ff, #00adb5);
+  color: #222;
+  box-shadow: 0 6px 16px rgba(0, 173, 181, 0.4);
+  transform: translateY(-3px);
+}
+
+#home-customer .home-box {
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#home-customer .home-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ====================== การ์ดคำแนะนำในหน้า Home ====================== */
+#home-customer .card {
+  background: #f0f0f0;
+  border-left: 5px solid #1565c0; /* แถบสีน้ำเงินด้านซ้าย */
+  padding: 25px 30px;
+  border-radius: 12px;
+  color: #333;
+  font-size: 1rem;
+  margin-top: 30px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+#home-customer .card:hover { 
+  background: #4a5568;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transform: translateY(-3px);
+}
+
+#home-customer .card h5 {
+  color: #1565c0;
+  font-weight: 600;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+/* 🎯 บังคับให้ข้อความใน card เปลี่ยนสีด้วย */
+#home-customer .card:hover p,
+#home-customer .card:hover li,
+#home-customer .card:hover span {
+  color: #f5f6fa !important;
+}
+
+#home-customer .card:hover h5 {
+  color: #90caf9;
+}
+
+/* =====================================================
+   🎨 ปรับความชัดเจนของหน้า Troubleshoot
+   ===================================================== */
+#troubleshoot {
+  background: linear-gradient(135deg, #4aeed8, #293133);
+  color: #1f1f1f;
+  font-family: "Prompt", sans-serif;
+  padding: 20px 30px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  padding-top: 25px;
+  position: relative;
+}
+
+/* หัวข้อใหญ่ */
+#troubleshoot-header h2 {
+  color: #004d55;
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 1.2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* คำอธิบาย */
+#troubleshoot-header p {
+  color: #2f2f2f;
+  font-size: 17px;
+  font-style: 30px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ===== กรอบของหัวข้อใหญ่ตอนยังไม่เลือกรุ่น ===== */
+#troubleshoot > #troubleshoot-header {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  padding: 35px 45px;
+  text-align: center;
+  max-width: 950px;
+  margin-top: 60px;
+  transition: transform 0.3s ease;
+}
+
+#troubleshoot > #troubleshoot-header:hover {
+  transform: scale(1.01);
+}
+
+/* ข้อความภายใน */
+#troubleshoot > #troubleshoot-header h2 {
+  color: #004d55;
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#troubleshoot > #troubleshoot-header p {
+  color: #2f2f2f;
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* หัวข้อเครื่อง */
+#selectedModel {
+  font-weight: 700;
+  font-size: 22px;
+  color: #004d55;
+  margin-top: 15px;
+  margin-bottom: 18px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* กล่องที่แสดงอาการ */
+#stepSymptoms {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 40px 50px;
+  width: 100%;
+  max-width: 950px;
+  transition: transform 0.3s ease;
+  margin: 0 auto;
+}
+
+#stepSymptoms:hover {
+  transform: scale(1.01);
+}
+
+/* ปุ่ม “ถัดไป” */
+#troubleshoot button,
+#troubleshoot .btn {
+  background: linear-gradient(135deg, #00adb5, #008a8f);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 12px 35px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.3s ease;
+}
+
+#troubleshoot button:hover,
+#troubleshoot .btn:hover {
+  background: linear-gradient(135deg, #00c7c2, #009a93);
+  color: #222;
+  box-shadow: 0 5px 15px rgba(0, 173, 181, 0.35);
+}
+
+/* ===== ตกแต่งฟอร์มอาการ ===== */
+#troubleshoot {
+  color: #222;
+  font-family: "Prompt", sans-serif;
+}
+
+/* กรอบแต่ละอาการ */
+#troubleshoot form label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #d1d5db;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 6px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.18);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  font-size: 18px;
+  width: 90%;
+  color: #222;
+}
+
+#troubleshoot form label:hover {
+  background: linear-gradient(135deg, #b0b6bb, #9da3a8);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+/* กล่องเช็กบ็อกซ์ */
+#troubleshoot input[type="checkbox"] {
+  margin-right: 15px;
+  transform: scale(1.6);
+  accent-color: #FFB300;
+}
+
+/* ===== จัดให้อยู่ 2 คอลัมน์ ===== */
+#troubleshoot #stepSymptoms form {
+  display: grid ;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 16px 22px;
+  justify-items: center;
+  max-width: 900px;
+  margin-top: 15px;
+}
+
+/* ============================== แก้ไข ============================== */
+#solution-box {
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  max-width: 9500px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "Prompt", sans-serif;
+}
+
+#solution-box h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #004d55;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.solution-desc {
+  color: #333;
+  font-size: 17px;
+  opacity: 0.8;
+  margin-bottom: 15px;
+}
+
+#solutionList {
+  text-align: left;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+#solutionList li {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.solution-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+/* กล่องย่อยภายใน (แบ่งสาเหตุ / วิธีแก้) */
+.solution-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  padding: 30px 100px;
+  margin: 35px auto;
+  margin-bottom: 30px;
+  max-width: 1200px;
+  width: 90%;
+  text-align: left;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  transition: transform 0.3s ease;
+}
+
+/* หัวข้อภายใน */
+.solution-card h4 {
+  font-size: 1.5rem;
+  color: #003b45;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-left: 5px solid #00b4aa;
+  padding-left: 10px;
+}
+
+/* ข้อความทั่วไป */
+.solution-card p, .solution-card li {
+  color: #222;
+  line-height: 1.7;
+  font-size: 18px;
+}
+
+/* รูปภาพในแต่ละส่วน */
+.solution-card img {
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  max-width: 6000px;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.25s ease;
+}
+
+.solution-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ✅ กล่องรวมปุ่ม */
+/* กล่องรวมปุ่ม */
+#troubleshoot .solution-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 0;
+}
+
+/* แถวปุ่ม */
+#troubleshoot .button-row {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+/* ปุ่มพื้นฐาน */
+#troubleshoot .button-card .btn {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 28px;
+  width: 140px;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+#troubleshoot .button-card .btn-success {
+  background: linear-gradient(135deg, #00b894, #00997a);
+}
+#troubleshoot .button-card .btn-success:hover {
+  background: linear-gradient(135deg, #55efc4, #00b894);
+  color: #222;
+  box-shadow: 0 6px 15px rgba(2, 136, 209, 0.35);
+  transform: translateY(-3px);
+}
+
+/* ⚠️ ไม่สำเร็จ = ส้มอมเหลือง (เตือนเบา ๆ) */
+#troubleshoot .button-card .btn-danger {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+#troubleshoot .button-card .btn-danger:hover {
+  background: linear-gradient(135deg, #FFD54F, #FFB300);
+  color: #222;
+  box-shadow: 0 6px 15px rgba(251, 140, 0, 0.35);
+  transform: translateY(-3px);
+}
+
+/* ⬅️ ย้อนกลับ = เทาอมฟ้า (กลาง ๆ ไม่ดึงสายตาเกินไป) */
+#troubleshoot .button-card .btn-secondary {
+  background: linear-gradient(135deg, #90a4ae, #607d8b);
+}
+#troubleshoot .button-card .btn-secondary:hover {
+  background: linear-gradient(135deg, #b0bec5, #78909c);
+  color: #222;
+  box-shadow: 0 6px 15px rgba(96, 125, 139, 0.35);
+  transform: translateY(-3px);
+}
+
+/* เอฟเฟกต์ hover */
+#troubleshoot .button-card .btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* ============================== หน้าไม่สำเร็จ ==============================*/
+#failPage {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 30px 40px;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 10px;
+  text-align: left;
+  color: #333;
+}
+
+#failPage h2 {
+  font-size: 32px;
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#failPage h4 {
+  margin-top: 20px;
+  color: #0277bd;
+  font-weight: 600;
+}
+
+/* ✅ แยกส่วนของหัวหน้าวิศวกรให้ชัดขึ้น */
+#failPage .engineer-section {
+  border-top: 2px solid #e0e0e0;
+  margin-top: 25px;
+  padding-top: 15px;
+}
+
+#failPage p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+#failPage b {
+  color: #000;
+}
+
+#failPage .btn {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 25px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: #fff;
+  margin: 15px 10px 0 10px;
+}
+
+#failPage .btn-secondary {
+  background: linear-gradient(135deg, #90a4ae, #607d8b);
+}
+#failPage .btn-secondary:hover {
+  background: linear-gradient(135deg, #b0bec5, #78909c);
+  transform: translateY(-2px);
+}
+
+#failPage .btn-primary {
+  background: linear-gradient(135deg, #00adb5, #007a80);
+}
+#failPage .btn-primary:hover {
+  background: linear-gradient(135deg, #00e5ff, #00adb5);
+  transform: translateY(-2px);
+}
+
+/* ============================ หน้า Report ============================= */
+#report {
+  background: linear-gradient(135deg, #4aeed8, #293133);
+  color: #1f1f1f;
+  font-family: "Prompt", sans-serif;
+  padding: 40px 0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.report-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 40px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+#report h2 {
+  text-align: center;
+  color: #004d55;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+#report .form-label {
+  font-weight: 600;
+  color: #222;
+}
+
+#report .form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+#report .form-control:focus {
+  border-color: #00adb5;
+  box-shadow: 0 0 8px rgba(0, 173, 181, 0.3);
+}
+
+#report textarea.form-control {
+  resize: none;
+}
+
+/* ปุ่มส่งรายงาน */
+#report button {
+  display: block;
+  margin: 20px auto 0;
+  background: linear-gradient(135deg, #00adb5, #008a8f);
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 35px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#report button:hover {
+  background: linear-gradient(135deg, #00c7c2, #00adb5);
+  color: #222;
+  box-shadow: 0 5px 15px rgba(0, 173, 181, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ================================ หน้า Home ช่าง ================================ 
+================================================================================= */
+#home-technician {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 115px 0;
+  background: linear-gradient(135deg, #00b4d8, #002b36); /* โทนน้ำเงินเข้ม */
+}
+
+#home-technician .home-box {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  padding: 55px 60px;
+  width: 90%;
+  max-width: 950px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#home-technician .home-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+#home-technician h2 {
+  font-size: 2.5rem;
+  color: #004d55;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#home-technician p {
+  font-size: 1.1rem;
+  color: #2f2f2f;
+  font-weight: 400;
+  margin-bottom: 35px;
+}
+
+/* ปุ่ม */
+#home-technician .btn {
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 14px 0;
+  width: 240px;
+  transition: all 0.3s ease;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#home-technician .d-grid {
+  display: flex !important;
+  justify-content: center;
+  gap: 25px;
+}
+
+#home-technician .d-grid .btn {
+  width: 370px;
+}
+
+/* ปุ่มฟ้า (Statistics) */
+#home-technician .btn-info {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+  border: none;
+}
+#home-technician .btn-info:hover {
+  background: linear-gradient(135deg, #48cae4, #00b4d8);
+  color: #222;
+  box-shadow: 0 6px 16px rgba(0, 180, 216, 0.4);
+  transform: translateY(-3px);
+}
+
+/* ปุ่มน้ำเงินเข้ม (Report-table) */
+#home-technician .btn-primary {
+  background: linear-gradient(135deg, #007a80, #005f63);
+  border: none;
+}
+#home-technician .btn-primary:hover {
+  background: linear-gradient(135deg, #00e5ff, #007a80);
+  color: #222;
+  box-shadow: 0 6px 16px rgba(0, 173, 181, 0.4);
+  transform: translateY(-3px);
+}
+
+/* การ์ดข้อมูล */
+#home-technician .card {
+  background: #f0f0f0;
+  border-left: 5px solid #1565c0;
+  padding: 25px 30px;
+  border-radius: 12px;
+  color: #333;
+  font-size: 1rem;
+  margin-top: 30px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+#home-technician .card:hover {
+  background: #4a5568;
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transform: translateY(-3px);
+}
+
+#home-technician .card h5 {
+  color: #1565c0;
+  font-weight: 600;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+/* 🎯 ให้ข้อความภายในการ์ดของหน้า Home ช่าง เปลี่ยนสีเมื่อ hover */
+#home-technician .card:hover p,
+#home-technician .card:hover li,
+#home-technician .card:hover span {
+  color: #f5f6fa !important;
+}
+
+#home-technician .card:hover h5 {
+  color: #90e0ef !important;
+}
+
+#home-technician .card:hover h5 {
+  color: #90caf9;
+}
+
+/* ========================================== หน้า Statistics ========================================== */
+/* 🎨 ธีมเข้มสำหรับหน้า Statistics */
+#statistics {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  font-size: 16px;
+  color: #FFD54F;
+  min-height: 100vh;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+/* กล่องกราฟ */
+.chart-box {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+/* หัวข้อในแต่ละกราฟ */
+.chart-box h3 {
+  color: #fff;
+  margin-bottom: 12px;
+  border-left: 4px solid #FFD54F;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-align: left;
+  padding-left: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* ==== ปรับขนาดกราฟให้เต็มกล่อง ==== */
+.chart-box canvas {
+  width: 100% !important;
+  height: 300px !important; /* ปรับได้ 300–400px ตามชอบ */
+}
+
+/* ให้ทุกกล่องกราฟมีขนาดเท่ากัน */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* ตารางข้อมูลสถิติ */
+#statTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20 ;
+  color: #e2e8f0;
+  background-color: rgba(15, 23, 42, 0.7);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* หัวตาราง */
+#statTable thead th {
+  background: #fbbf24;
+  color: #0f172a;
+  padding: 10px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* แถวตาราง */
+#statTable tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Hover effect */
+#statTable tr:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transition: background-color 0.3s ease;
+}
+
+#statTable tbody td {
+  font-size: 10px;
+  color: #e2e8f0;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ===== ปรับขนาดตัวอักษรของตาราง DataTable แบบบังคับ ===== */
+#statTable.dataTable {
+  font-size: 20px !important; /* ✅ ปรับขนาดข้อมูลในตาราง */
+}
+
+#statTable.dataTable thead th {
+  font-size: 15px !important; /* ✅ หัวตารางใหญ่ขึ้น */
+  font-weight: 600 !important;
+}
+
+#statTable.dataTable tbody td {
+  font-size: 14px !important; /* ✅ ข้อมูลในตาราง */
+  vertical-align: middle !important;
+}
+
+/* DataTables ปุ่มควบคุม */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9 !important;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: #38bdf8;
+  color: #0f172a !important;
+}
+
+.dataTables_length label,
+.dataTables_filter label {
+  color: #cbd5e1;
+}
+
+.dataTables_filter input {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+/* ====================== ฟอร์ม / ตาราง ====================== */
+input, select, textarea {
+  border-radius: 8px !important; /* มุมโค้ง */
+}
+
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+}
+
+/* จัดการ alignment */
+.dt-left {
+  text-align: left;
+}
+.dt-center {
+  text-align: center;
+}
+.dt-right {
+  text-align: right;
+}
+
+/* ================================== 🎨 Report Section ==================================== */
+/* ====== กล่องรวมรายงาน ====== */
+#report-table {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 16px;
+  padding: 20px;
+  color: #f1f5f9;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* ====== หัวข้อหลัก ====== */
+#report-table h2 {
+  color: #fbbf24;
+  font-weight: 600;
+  font-size: 2.2rem; /* ✅ ตัวใหญ่ขึ้น */
+  margin-bottom: 10px;
+  border-left: 4px solid #38bdf8;
+  padding-left: 10px;
+}
+
+#report-table p {
+  color: #94a3b8;
+  margin-bottom: 25px;
+}
+
+/* ===== ช่องค้นหา ===== */
+.report-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: flex-end;
+  margin-bottom: 15px;
+}
+
+.report-search div {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-search input {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 320px;
+  transition: 0.2s ease;
+}
+
+.report-search input:focus {
+  border-color: #fbbf24;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(56,189,248,0.3);
+}
+
+.search-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.search-container i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 18px;
+}
+
+.search-container input {
+  padding-left: 38px; /* เผื่อที่ให้ไอคอน */
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #1c1e33;
+  color: #fff;
+  outline: none;
+  height: 38px;
+  width: 320px;
+}
+
+/* ===== ตาราง ===== */
+.report-table-wrapper {
+  overflow-y: auto;
+  max-height: 70vh;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Scrollbar */
+.report-table-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+.report-table-wrapper::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border-radius: 8px;
+}
+.report-table-wrapper::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ===== โครงตาราง ===== */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px; /* ✅ ใหญ่ขึ้น */
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* ✅ หัวคอลัมน์สีเหลือง */
+.report-table thead {
+  background: #fbbf24;
+  position: sticky; /* ให้หัวลอยเวลา scroll */
+  top: 0;
+  z-index: 2;
+}
+
+.report-table th {
+  color: #0f172a;
+  text-align: center;
+  padding: 12px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+/* ✅ แถวสลับสี */
+.report-table tbody tr:nth-child(odd) {
+  background: rgba(255,255,255,0.05);
+}
+.report-table tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.1);
+}
+/* 🔹 แถวข้อมูลสว่างขึ้นเมื่อเม้าโดน */
+.report-table tbody tr {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.report-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.25); /* สว่างขึ้นในโทนฟ้าเทา */
+  cursor: default;
+}
+
+/* ✅ ตัวอักษรในช่องข้อมูล */
+.report-table td {
+  color: #e2e8f0;
+  text-align: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  word-wrap: break-word;
+}
+
+#customTooltip {
+  position: absolute;
+  display: none;
+  background: rgba(30, 41, 59, 0.95);
+  color: #f8fafc;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  font-size: 16px;
+  z-index: 9999;
+  max-width: 400px;
+  white-space: normal;
+  pointer-events: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  min-width: 70px;
+  color: #fff;
+}
+
+.status-success {
+  background: #38bdf8;
+  color: #222;
+}
+
+.status-repair {
+  background: #fbbf24;
+  color: #222;
+}
+
+.status-other {
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid #94a3b8;
+  color: #94a3b8;
+}
+
+/* =========================================== ซ่อน element ============================================= */
+.hidden {
+  display: none !important; /* ใช้ซ่อนหน้าอื่นที่ไม่ได้แสดงอยู่  ห้ามลบเด็ดขาดดดดดดดดดดดด */
 }
 
   </style>
@@ -115,16 +1514,20 @@
 <body>
   <!-- Sidebar ลูกค้า -->
   <div class="sidebar hidden" id="sidebar-customer">
-    <h4>📋 Menu</h4>
-    <a href="#" onclick="showPage('home')">🏠 Home</a>
+    <h4><i class="bi bi-list"></i> MEDITOP</h4>
+    <a href="#" onclick="showPage('home')"><i class="bi bi-house-door-fill"></i> Home</a>
     <!-- เมนูย่อย Troubleshoot -->
+     
     <div class="submenu">
-      <a href="#" onclick="toggleSubmenu('troubleshoot-submenu')">🔧 Troubleshoot</a>
-      <ul id="troubleshoot-submenu" class="submenu-items hidden">
+      <a href="#" onclick="toggleSubmenu('troubleshoot-submenu')"><i class="bi bi-tools"></i> Troubleshoot</a>
+      <ul id="troubleshoot-submenu" class="submenu-wrapper hidden">
         <!-- เครื่องช่วยหายใจ -->
         <li>
-          <li onclick="toggleSubmenu('infusion-models')">Infusion Pump</li>
-          <ul id="infusion-models" class="submenu-items hidden">
+          <li class="submenu-title" onclick="toggleSubmenu('infusion-models'); document.getElementById('arrow-infusion').classList.toggle('rotate');">
+      Infusion Pump 
+      <span id="arrow-infusion" class="arrow">▶</span>
+    </li>
+          <ul id="infusion-models" class="submenu-box hidden">
             <li onclick="selectModel('TOP-2300')">TOP-2300</li>
             <li onclick="selectModel('MJ-210')">MJ-210</li>
             <li onclick="selectModel('MJ-200')">MJ-200</li>
@@ -132,232 +1535,335 @@
         </li>
         <!-- Syring Pump -->
         <li>
-          <li onclick="toggleSubmenu('syring-models')">Syring Pump</li>
-          <ul id="syring-models" class="submenu-items hidden">
+          <li class="submenu-title" onclick="toggleSubmenu('syringe-models'); document.getElementById('arrow-syringe').classList.toggle('rotate');">
+      Syringe Pump 
+      <span id="arrow-syringe" class="arrow">▶</span>
+    </li>
+          <ul id="syringe-models" class="submenu-box hidden">
             <li onclick="selectModel('TOP-5530')">TOP-5530</li>
-            <li onclick="selectModel('TOP-5520')">TOP-5520</li>
           </ul>
         </li>
         <!-- High frow -->
         <li>
-          <li onclick="toggleSubmenu('high-models')">High frow</li>
-          <ul id="high-models" class="submenu-items hidden">
+           <li class="submenu-title" onclick="toggleSubmenu('high-models'); document.getElementById('arrow-high').classList.toggle('rotate');">
+      High Flow 
+      <span id="arrow-high" class="arrow">▶</span>
+    </li>
+          <ul id="high-models" class="submenu-box hidden">
             <li onclick="selectModel('HF-75A')">HF-75A</li>
-            <li onclick="selectModel('HF-70A')">HF-70A</li>
-          </ul>
-        </li>
-        <!-- Monitor -->
-        <li>
-          <li onclick="toggleSubmenu('monitor-models')">Monitor</li>
-          <ul id="monitor-models" class="submenu-items hidden">
-            <li onclick="selectModel('M-32')">M-32</li>
-            <li onclick="selectModel('M-40')">M-40</li>
-            <li onclick="selectModel('M-50')">M-50</li>
-          </ul>
-        </li>
-        <!-- Defibrillator -->
-        <li>
-          <li onclick="toggleSubmenu('defibrillator-models')">Defibrillator</li>
-          <ul id="defibrillator-models" class="submenu-items hidden">
-            <li onclick="selectModel('D-100')">D-100</li>
-            <li onclick="selectModel('D-500')">D-500</li>
-            <li onclick="selectModel('D-700')">D-700</li>
           </ul>
         </li>
         <!-- Ventilator -->
         <li>
-          <li onclick="toggleSubmenu('ventilator-models')">Ventilator</li>
-          <ul id="ventilator-models" class="submenu-items hidden">
+         <li class="submenu-title" onclick="toggleSubmenu('ventilator-models'); document.getElementById('arrow-vent').classList.toggle('rotate');">
+      Ventilator 
+      <span id="arrow-vent" class="arrow">▶</span>
+    </li>
+          <ul id="ventilator-models" class="submenu-box hidden">
             <li onclick="selectModel('R860')">R860</li>
             <li onclick="selectModel('VG70')">VG70</li>
           </ul>
         </li>
       </ul>
     </div>
-    <a href="#" onclick="showPage('report')">📝 Report</a>
+    <a href="#" onclick="showPage('report')"><i class="bi bi-pencil-square"></i> Report</a>
   </div>
 
   <!-- Sidebar ช่าง -->
   <div class="sidebar hidden" id="sidebar-technician">
-    <h4>📋 Menu</h4>
-    <a href="#" onclick="showPage('home')">🏠 Home</a>
-    <a href="#" onclick="showPage('report-table')">📝 Report</a>
-    <a href="#" onclick="showPage('statistics')">📊 Statistics</a>
+    <h4><i class="bi bi-list"></i> MEDITOP</h4>
+    <a href="#" onclick="showPage('home')"><i class="bi bi-house-door-fill"></i> Home</a>
+    <a href="#" onclick="showPage('report-table')"><i class="bi bi-pencil-square"></i> Report</a>
+    <a href="#" onclick="showPage('statistics')"><i class="bi bi-bar-chart-fill"></i> Statistics</a>
   </div>
 
   <!-- Content -->
   <div class="content">
     <!-- Home ลูกค้า -->
     <div id="home-customer" class="page hidden">
-      <h2>👨‍⚕️ ยินดีต้อนรับ <span id="hospitalName"></span></h2>
+      <div class="home-box">
+      <h2><i class="bi bi-hospital"></i> ยินดีต้อนรับ <span id="hospitalName"></span></h2>
       <p>เลือกเมนูที่ต้องการด้านล่าง</p>
 
       <!-- ปุ่มลัด -->
       <div class="d-grid gap-3 my-4">
-        <button class="btn btn-success btn-lg" onclick="goToTroubleshoot()">🔧 แก้ไขปัญหา</button>
-        <button class="btn btn-primary btn-lg" onclick="showPage('report')">📝 แจ้งซ่อม / รายงาน</button>
+        <button class="btn btn-success btn-lg" onclick="goToTroubleshoot()"><i class="bi bi-tools"></i> Troubleshoot</button>
+        <button class="btn btn-primary btn-lg" onclick="showPage('report')"><i class="bi bi-pencil-square"></i> Report</button>
       </div>
 
       <!-- การ์ดแนะนำ -->
       <div class="card p-3 shadow-sm">
-        <h5>ℹ️ วิธีการใช้งาน</h5>
-        <p style="font-size:14px; color:#666;">
-          - หากพบปัญหา ให้เลือกเมนู <b>แก้ไขปัญหา</b> ก่อน<br>
-          - หากแก้ไขเองไม่ได้ ให้กดเมนู <b>แจ้งซ่อม / รายงาน</b><br>
-          - คุณสามารถกลับมาดูสถานะการใช้งานได้ที่เมนูด้านซ้าย
+        <h5><i class="bi bi-info-circle-fill"></i> วิธีการใช้งาน</h5>
+        <p>
+          - หากพบปัญหา ให้เลือกเมนู <b>Troubleshoot</b> ก่อน เพื่อแก้ไขปัญหาเบื้องต้น<br>
+          - หากแก้ไขเองไม่สำเร็จ ให้เลือกเมนู <b>Report</b> เพื่อทำการส่งข้อมูลมายังทีม service<br>
+          - หากต้องการแจ้งซ่อม ให้เลือกเมนู <b>Report</b> เพื่อทำการส่งข้อมูลมายังทีม service<br>
         </p>
       </div>
     </div>
+</div>
 
     <!-- Home ช่าง -->
     <div id="home-technician" class="page hidden">
-      <h2>🛠 ยินดีต้อนรับ ทีมช่าง</h2>
-      <p>โปรดเลือกเมนูด้านล่างเพื่อดูสถิติและรายงานล่าสุด</p>
+      <div class="home-box">
+      <h2><i class="bi bi-person-fill-gear"></i> ยินดีต้อนรับ Service Team</h2>
+      <p>เลือกเมนูที่ต้องการด้านล่าง</p>
 
       <!-- ปุ่มลัด -->
       <div class="d-grid gap-3 my-4">
-        <button class="btn btn-info btn-lg" onclick="showPage('statistics')">📊 ดูสถิติและรายงานล่าสุด</button>
-        <button class="btn btn-primary btn-lg" onclick="showPage('report-table')">📝 แจ้งซ่อม / รายงาน</button>
+        <button class="btn btn-info btn-lg" onclick="showPage('statistics')"><i class="bi bi-bar-chart-fill"></i> Statistics</button>
+        <button class="btn btn-primary btn-lg" onclick="showPage('report-table')"><i class="bi bi-pencil-square"></i> Report</button>
       </div>
 
       <!-- การ์ดอธิบาย -->
       <div class="card p-3 shadow-sm">
-        <h5>ℹ️ หมายเหตุ</h5>
-        <p style="font-size:14px; color:#666;">
-          ในส่วน <b>สถิติ</b> คุณสามารถดูกราฟสรุปปัญหาที่พบบ่อย, 
-          โรงพยาบาลที่แจ้งซ่อมบ่อยที่สุด และตรวจสอบตารางรายงานล่าสุดได้
+        <h5><i class="bi bi-info-circle-fill"></i> วิธีการใช้งาน</h5>
+        <p>
+          - หากต้องการดูกราฟสถิติ ให้เลือกเมนู <b>Statistics</b> เพื่อดูสถิติที่พบบ่อย<br>
+          - หากต้องการดูรายการแจ้งซ่อม ให้เลือกเมนู <b>Report</b> เพื่อดูรายการแจ้งซ่อม<br>
         </p>
       </div>
     </div>
+  </div>
 
   <!-- Troubleshoot -->
 <div id="troubleshoot" class="page hidden">
-  <h2>🔧 แก้ไขปัญหา</h2>
-
+    <div id="stepSymptoms" class="hidden">
+    <div id="troubleshoot-header">
+    <h2><i class="bi bi-tools"></i>Troubleshoot</h2>
+    <p> กรุณาเลือกรุ่นเครื่อง และอาการที่พบ เพื่อดูแนวทางการแก้ไขเบื้องต้น</p>
+  </div>
   <!-- พอเลือกรุ่นจากเมนูซ้าย จะมาแสดงตรงนี้ -->
-  <div id="stepSymptoms" class="hidden">
+
     <h5 id="selectedModel"></h5>
     <!-- ฟอร์มของแต่ละรุ่น -->
   <form id="symptomForm-TOP-2300" class="hidden">
-    <label><input type="checkbox" value="air alarm"> Air alarm</label><br>
-    <label><input type="checkbox" value="empty alarm"> Empty alarm</label><br>
-    <label><input type="checkbox" value="free flow"> FrEE Flo</label><br>
-    <label><input type="checkbox" value="over"> oVEr</label><br>
-    <label><input type="checkbox" value="under"> undr</label><br>
-    <label><input type="checkbox" value="occlusion alarm"> Occlusion alarm</label><br>
-    <label><input type="checkbox" value="door"> door</label><br>
-    <label><input type="checkbox" value="drop"> droP</label><br>
-    <label><input type="checkbox" value="er13"> Er13</label><br>
-    <label><input type="checkbox" value="er24"> Er24</label><br>
-    <label><input type="checkbox" value="bate"> bATE</label><br>
-    <label><input type="checkbox" value="ชาร์จแบตเตอรี่ไม่เต็ม"> ชาร์จแบตเตอรี่ไม่เต็ม</label><br>
-    <label><input type="checkbox" value="ไฟสัญลักษณ์แบตเตอรี่กระพริบ"> ไฟสัญลักษณ์แบตเตอรี่กระพริบ</label><br>
+    <label><input type="checkbox" name="symptom" value="air alarm" onclick="selectSymptom(this.value)"> Air alarm</label>
+    <label><input type="checkbox" name="symptom" value="empty alarm" onclick="selectSymptom(this.value)"> Empty alarm</label>
+    <label><input type="checkbox" name="symptom" value="free flow" onclick="selectSymptom(this.value)"> FrEE Flo</label>
+    <label><input type="checkbox" name="symptom" value="over" onclick="selectSymptom(this.value)"> oVEr</label>
+    <label><input type="checkbox" name="symptom" value="under" onclick="selectSymptom(this.value)"> undr</label>
+    <label><input type="checkbox" name="symptom" value="occlusion alarm" onclick="selectSymptom(this.value)"> Occlusion alarm</label>
+    <label><input type="checkbox" name="symptom" value="door" onclick="selectSymptom(this.value)"> door</label>
+    <label><input type="checkbox" name="symptom" value="drop" onclick="selectSymptom(this.value)"> droP</label>
+    <label><input type="checkbox" name="symptom" value="เสียงแจ้งเตือน ดัง/เบา" onclick="selectSymptom(this.value)"> เสียงแจ้งเตือน ดัง/เบา</label> 
+    <label><input type="checkbox" name="symptom" value="er13" onclick="selectSymptom(this.value)"> Er13</label>
+    <label><input type="checkbox" name="symptom" value="er24" onclick="selectSymptom(this.value)"> Er24</label>
+    <label><input type="checkbox" name="symptom" value="bate" onclick="selectSymptom(this.value)"> bATE</label>
+    <label><input type="checkbox" name="symptom" value="ชาร์จแบตเตอรี่ไม่เต็ม" onclick="selectSymptom(this.value)"> ชาร์จแบตเตอรี่ไม่เต็ม</label>
+    <label><input type="checkbox" name="symptom" value="ไฟสัญลักษณ์แบตเตอรี่กระพริบ" onclick="selectSymptom(this.value)"> ไฟสัญลักษณ์แบตเตอรี่กระพริบ</label>
   </form>
 
   <form id="symptomForm-MJ-210" class="hidden">
-    <label><input type="checkbox" value="ไฟกระพริบ"> ไฟกระพริบ</label><br>
-    <label><input type="checkbox" value="แรงดันผิดพลาด"> แรงดันผิดพลาด</label><br>
+    <label><input type="checkbox" name="symptom" value="free flow" onclick="selectSymptom(this.value)"> FrEE.</label>
+    <label><input type="checkbox" name="symptom" value="over" onclick="selectSymptom(this.value)"> oVEr.</label>
+    <label><input type="checkbox" name="symptom" value="under" onclick="selectSymptom(this.value)"> undr.</label>
+    <label><input type="checkbox" name="symptom" value="air alarm" onclick="selectSymptom(this.value)"> Ari alarm</label>
+    <label><input type="checkbox" name="symptom" value="occlusion alarm u" onclick="selectSymptom(this.value)"> - - -u.</label>
+    <label><input type="checkbox" name="symptom" value="occlusion alarm l" onclick="selectSymptom(this.value)"> L.- - -</label>
+    <label><input type="checkbox" name="symptom" value="empty" onclick="selectSymptom(this.value)"> EPey.</label>
+    <label><input type="checkbox" name="symptom" value="drop" onclick="selectSymptom(this.value)"> droP.</label>
+    <label><input type="checkbox" name="symptom" value="ไฟสัญลักษณ์แบตเตอรี่กระพริบ" onclick="selectSymptom(this.value)"> ไฟสัญลักษณ์แบตเตอรี่กระพริบ</label>
   </form>
 
-  <form id="symptomForm-MJ-200" class="hidden">
-    <label><input type="checkbox" value="น้ำไม่ไหล"> น้ำไม่ไหล</label><br>
-    <label><input type="checkbox" value="มีฟองอากาศ"> มีฟองอากาศ</label><br>
+  <form id="symptomForm-MJ-200" class="hidden">    
+    <label><input type="checkbox" name="symptom" value="air alarm" onclick="selectSymptom(this.value)"> Ari alarm</label>
+    <label><input type="checkbox" name="symptom" value="occlusion alarm u" onclick="selectSymptom(this.value)"> - - -u.</label>
+    <label><input type="checkbox" name="symptom" value="occlusion alarm l" onclick="selectSymptom(this.value)"> L.- - -</label>
+    <label><input type="checkbox" name="symptom" value="ไฟสัญลักษณ์แบตเตอรี่กระพริบ" onclick="selectSymptom(this.value)"> ไฟสัญลักษณ์แบตเตอรี่กระพริบ</label>
   </form>
-  
-    <button class="btn btn-primary" onclick="goToSolutions()">ถัดไป</button>
+
+  <form id="symptomForm-TOP-5530" class="hidden">    
+    <label><input type="checkbox" name="symptom" value="sensor check" onclick="selectSymptom(this.value)"> sensor check</label>
+    <label><input type="checkbox" name="symptom" value="user syringe" onclick="selectSymptom(this.value)"> เครื่องไม่ตรวจจับ syringe</label>
+    <label><input type="checkbox" name="symptom" value="ชาร์จแบตเตอรี่ไม่เต็ม" onclick="selectSymptom(this.value)"> ชาร์จแบตเตอรี่ไม่เต็ม</label>
+  </form>
+
+  <form id="symptomForm-HF-75A" class="hidden">    
+    <label><input type="checkbox" name="symptom" value="check pipeline" onclick="selectSymptom(this.value)"> Check the pipeline alarm</label>
+  </form>
+
+  <form id="symptomForm-R860" class="hidden">    
+    <label><input type="checkbox" name="symptom" value="paw transducer faill" onclick="selectSymptom(this.value)"> Paw Transducer Faill</label>
+    <label><input type="checkbox" name="symptom" value="relief valve faill" onclick="selectSymptom(this.value)"> Relief Valve Faill</label>
+    <label><input type="checkbox" name="symptom" value="exhalation valve faill" onclick="selectSymptom(this.value)"> Exhalation Valve Faill</label>
+    <label><input type="checkbox" name="symptom" value="expiratory flow sensor faill" onclick="selectSymptom(this.value)"> Expiratory Flow Sensor Faill</label>
+    <label><input type="checkbox" name="symptom" value="air flow sensor faill" onclick="selectSymptom(this.value)"> Air Flow Sensor Faill</label>
+    <label><input type="checkbox" name="symptom" value="oxygen sensor faill" onclick="selectSymptom(this.value)"> Oxygen Sensor Faill</label>
+    <label><input type="checkbox" name="symptom" value="o2 flow sensor faill" onclick="selectSymptom(this.value)"> O2 Flow Sensor Faill</label>
+    <label><input type="checkbox" name="symptom" value="resistance faill" onclick="selectSymptom(this.value)"> Resistance Faill</label>
+    <label><input type="checkbox" name="symptom" value="circuit measurements faill" onclick="selectSymptom(this.value)"> Circuit Measurements Faill</label>
+    <label><input type="checkbox" name="symptom" value="จอสัมผัสไม่ตรงตำแหน่ง" onclick="selectSymptom(this.value)"> จอสัมผัสไม่ตรงตำแหน่ง</label>
+    <label><input type="checkbox" name="symptom" value="ปิดเครื่องไม่ได้" onclick="selectSymptom(this.value)"> ปิดเครื่องไม่ได้</label>
+  </form>
+
+  <form id="symptomForm-VG70" class="hidden">    
+    <label><input type="checkbox" name="symptom" value="leak test faill" onclick="selectSymptom(this.value)"> Leak Test Faill</label>
+    <label><input type="checkbox" name="symptom" value="flow sensor test faill" onclick="selectSymptom(this.value)"> Flow Sensor Test Faill</label>
+    <label><input type="checkbox" name="symptom" value="pressure sensor test faill" onclick="selectSymptom(this.value)"> Pressure Sensor Test Faill</label>
+    <label><input type="checkbox" name="symptom" value="oxygen concentration below 18% alarm" onclick="selectSymptom(this.value)"> Oxygen concentration below 18% alarm</label>
+    <label><input type="checkbox" name="symptom" value="จอสัมผัสไม่ตรงตำแหน่ง" onclick="selectSymptom(this.value)"> จอสัมผัสไม่ตรงตำแหน่ง</label>
+  </form>
+
+    <button class="btn btn-primary" onclick="goToSolutions()"> ถัดไป <i class="bi bi-arrow-right"></i></button>
+  </div>
+
+  <div id="troubleshoot-header">
+    <h2><i class="bi bi-tools"></i>Troubleshoot</h2>
+    <p> กรุณาเลือกรุ่นเครื่อง และอาการที่พบ เพื่อดูแนวทางการแก้ไขเบื้องต้น</p>
   </div>
 
   <!-- วิธีแก้ไข -->
-  <div id="stepSolutions" class="hidden">
-    <h5>🛠 วิธีแก้ไข</h5>
-    <ul id="solutionList" class="list-group"></ul>
-    <div id="solutionImages" class="mt-3"></div>
-    <!-- แสดงผลลัพธ์ -->
-     <div id="resultMessage" class="mt-3"></div>
-    <!-- ปุ่มผลลัพธ์ -->
-     <div class="mt-4">
-      <button class="btn btn-success" onclick="markSuccess()">สำเร็จ</button>
-      <button class="btn btn-danger" onclick="markFail()">ไม่สำเร็จ</button>
-     </div>
-    <button class="btn btn-secondary" onclick="backToSymptoms()">ย้อนกลับ</button>
+<div id="stepSolutions" class="hidden">
+  <div id="solution-box">
+      <ul id="solutionList" class="list-group"></ul>
+      <div id="solutionImages" class="mt-3"></div>
+      <div id="resultMessage" class="mt-3"></div>
   </div>
+</div>
 
   <!-- หน้าล้มเหลว -->
   <div id="failPage" class="page hidden">
-    <h2 style="color:red;">❌ การแก้ไขไม่สำเร็จ</h2>
-    <p>กรุณาติดต่อฝ่ายซ่อมเพื่อรับบริการเพิ่มเติม</p>
-    <p><b>ช่องทางติดต่อ:</b> 02-123-4567</p>
-    <p><b>ที่อยู่:</b> ศูนย์บริการเครื่องมือแพทย์ เลขที่ 123 ถนนสุขภาพ กรุงเทพฯ</p>
+  <h2 style="color:red;"><i class="bi bi-x-circle-fill"></i> การแก้ไขไม่สำเร็จ</h2>
+  <p>กรุณาติดต่อฝ่ายซ่อมเพื่อรับบริการเพิ่มเติม</p>
 
-    <button class="btn btn-secondary" onclick="goBackToSolutions()">ย้อนกลับ</button>
-    <button class="btn btn-primary" onclick="showPage('report')">ไปที่หน้ารายงาน/แจ้งซ่อม</button>
+  <h4><i class="bi bi-building-fill"></i> สำนักงานใหญ่</h4>
+  <p><i class="bi bi-telephone"></i> <b>โทรศัพท์ :</b> 0-2933-1133 ต่อ 511 , 0-2933-1226 ต่อ 511</p>
+  <p><i class="bi bi-printer"></i> <b>โทรสาร :</b> 0-2933-0811-2</p>
+  <p><i class="bi bi-envelope"></i> <b>Email :</b> info@meditopthailand.com</p>
+  <p><i class="bi bi-geo-alt"></i> <b>ที่อยู่ :</b> บริษัท เมดิทอป จำกัด เลขที่ 334 ซอยลาดพร้าว 71 (สังคมสงเคราะห์เหนือ 1) แขวงคลองเจ้าคุณสิงห์ เขตวังทองหลาง กรุงเทพฯ 10310</p>
+
+  <div class="engineer-section">
+    <h4><i class="bi bi-person-gear"></i> หัวหน้าวิศวกรบริการ</h4>
+    <h4> ฝ่ายเครื่องมือแพทย์ทางด้านโรคปอด</h4>
+    <p><i class="bi bi-phone"></i> <b>โทรศัพท์มือถือ :</b> 09-8407-6012</p>
+    <p><i class="bi bi-envelope-at"></i> <b>Email :</b> songyod_pmd@meditopthailand.com</p>
   </div>
+
+  <div class="fail-buttons">
+    <button class="btn btn-secondary" onclick="goBackToSolutions()"><i class="bi bi-arrow-left"></i> ย้อนกลับ</button>
+    <button class="btn btn-primary" onclick="showPage('report')"><i class="bi bi-pencil-square"></i> ไปที่หน้ารายงาน/แจ้งซ่อม</button>
+  </div>
+</div>
 
 </div>
 
     <!-- Report ลูกค้า -->
     <div id="report" class="page hidden">
-      <h2>📝 รายงาน / แจ้งซ่อม</h2>
+      <div class="report-box">
+      <h2><i class="bi bi-pencil-square"></i> รายงาน / แจ้งซ่อม</h2>
       <form id="reportForm">
-        <div class="mb-3"><label class="form-label">👤 ชื่อ</label><input type="text" class="form-control" id="user" required></div>
-        <div class="mb-3"><label class="form-label">รุ่น</label><input type="text" class="form-control" id="model" required></div>
-        <div class="mb-3"><label class="form-label">🆔 SN</label><input type="text" class="form-control" id="sn" required></div>
-        <div class="mb-3"><label class="form-label">อาการ</label><textarea class="form-control" id="symptom" rows="3" required></textarea></div>
-        <div class="mb-3"><label class="form-label">📞 เบอร์โทร</label><input type="text" class="form-control" id="phone" required></div>
-        <button type="submit" class="btn btn-primary">ส่งรายงาน</button>
+        <div class="mb-3"><label class="form-label"><i class="bi bi-person-fill"></i> ชื่อ</label><input type="text" class="form-control" id="user" required></div>
+        <div class="mb-3"><label class="form-label"><i class="bi bi-tag-fill"></i> รุ่น</label><input type="text" class="form-control" id="model" required></div>
+        <div class="mb-3"><label class="form-label"><i class="bi bi-upc-scan"></i> SN</label><input type="text" class="form-control" id="sn" required></div>
+        <div class="mb-3"><label class="form-label"><i class="bi bi-exclamation-triangle-fill"></i> อาการ</label><textarea class="form-control" id="symptom" rows="3" required></textarea></div>
+        <div class="mb-3"><label class="form-label"><i class="bi bi-telephone-fill"></i> เบอร์โทร</label><input type="text" class="form-control" id="phone" required></div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-send-fill"></i> ส่งรายงาน</button>
       </form>
+      </div>
     </div>
 
     <!-- Report ช่าง -->
-  <div id="report-table" class="page hidden">
-    <h2>📝 รายงานล่าสุด</h2>
-    <p>ตารางนี้แสดงรายการแจ้งซ่อมล่าสุดจากลูกค้า</p>
-    <div class="table-responsive">
-      <!-- ช่องค้นหา -->
-      <div class="mb-3 d-flex gap-2">
-        <div>
-          <label for="searchHospital" class="form-label">🏥 ค้นหาโรงพยาบาล</label>
-          <input type="text" id="searchHospital" class="form-control" placeholder="กรอก โรงพยาบาล เพื่อตรวจสอบ">
-        </div>
-        <div>
-          <label for="searchUser" class="form-label">👤 ค้นหาชื่อลูกค้า</label>
-          <input type="text" id="searchUser" class="form-control" placeholder="กรอก ชื่อ เพื่อตรวจสอบ">
-        </div>
-        <div>
-          <label for="searchSN" class="form-label">🔍 ค้นหา SN</label>
-          <input type="text" id="searchSN" class="form-control" placeholder="กรอก SN เพื่อตรวจสอบ">
-        </div>
-      </div>
+  <!-- 🧾 REPORT SECTION -->
+<div id="report-table" class="page hidden">
+  <h2><i class="bi bi-clipboard2-check-fill"></i> Report</h2>
+  <p>ตรวจสอบข้อมูลการแจ้งซ่อมจากลูกค้า</p>
 
-      <table class="table table-bordered table-striped mt-3">
-        <thead class="table-dark">
-          <tr>
-            <th>Timestamp</th>
-            <th>Hospital</th>
-            <th>User</th>
-            <th>Email</th>
-            <th>Model</th>
-            <th>SN</th>
-            <th>Symptom</th>
-            <th>Phone</th>
-          </tr>
-        </thead>
-        <tbody id="reportData">
-          <!-- ดึงข้อมูลจาก Google Sheet มาแสดง -->
-        </tbody>
-      </table>
+  <!-- 🔍 ช่องค้นหา -->
+  <div class="report-search">
+    <div class="search-container"><i class="bi bi-search"></i>
+      <input type="text" id="searchHospital" placeholder="กรอกชื่อโรงพยาบาลเพื่อตรวจสอบ">
+    </div>
+    <div class="search-container"><i class="bi bi-search"></i>
+      <input type="text" id="searchUser" placeholder="กรอกชื่อลูกค้าเพื่อตรวจสอบ">
+    </div>
+    <div class="search-container"><i class="bi bi-search"></i>
+      <input type="text" id="searchSN" placeholder="กรอก SN เพื่อตรวจสอบ">
     </div>
   </div>
 
-      <!-- Statistics ช่าง -->
-      <div id="statistics" class="page hidden">
-        <h2>📊 สถิติ</h2>
-        <p>หน้านี้กำลังพัฒนา</p>
-      </div>
-    </div>
+  <!-- 📊 ตาราง -->
+  <div class="report-table-wrapper">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th> Timestamp</th>
+          <th> Hospital</th>
+          <th> User</th>
+          <th> Email</th>
+          <th> Model</th>
+          <th> SN</th>
+          <th> Symptom</th>
+          <th> Phone</th>
+        </tr>
+      </thead>
+      <tbody id="reportData">
+        <!-- ดึงข้อมูลจาก Google Sheet มาแสดง -->
+      </tbody>
+    </table>
+  </div>
+</div>
 
+      <!-- Statistics ช่าง -->
+      <div id="statistics" class="page hidden p-4">
+  <h2><i class="bi bi-bar-chart-fill"></i> Statistics</h2>
+  <p>รวมข้อมูลจากการรายงานทั้งหมด แสดงเฉพาะ 5 อันดับสูงสุด</p>
+
+<!-- แถวบน: กราฟเส้น + วงกลมสำเร็จ -->
+<div class="chart-row">
+  <div class="chart-box" style="flex: 2;">
+    <h3><i class="bi bi-graph-up"></i> แนวโน้มการแจ้งปัญหาตามเวลา</h3>
+    <canvas id="trendChart"></canvas>
+  </div>
+
+  <div class="chart-box small-chart" style="flex: 1;">
+    <h3 style="text-align:center;"><i class="bi bi-check-circle-fill"></i>  อาการ-สำเร็จ</h3>
+    <canvas id="symptomSuccessChart"></canvas>
+  </div>
+</div>
+
+<!-- แถวล่าง: กราฟแท่ง 2 อัน + วงกลมส่งซ่อม -->
+<div class="chart-row">
+  <div class="chart-box small-bar">
+    <h3><i class="bi bi-hospital-fill"></i> โรงพยาบาลที่พบปัญหามากสุด</h3>
+    <canvas id="hospitalChart"></canvas>
+  </div>
+
+  <div class="chart-box small-bar">
+    <h3><i class="bi bi-gear-fill"></i> รุ่นเครื่องที่พบปัญหามากสุด</h3>
+    <canvas id="modelChart"></canvas>
+  </div>
+
+  <div class="chart-box small-chart">
+    <h3 style="text-align:center;"><i class="bi bi-x-circle-fill"></i>  อาการ-ส่งซ่อม</h3>
+    <canvas id="symptomRepairChart"></canvas>
+  </div>
+</div>
+<!-- ตารางข้อมูลสถิติ -->
+<div class="chart-box" style="margin-top: 30px;">
+  <h3><i class="bi bi-table"></i> ตารางข้อมูลสถิติ</h3>
+  <table id="statTable" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>วันที่</th>
+        <th>โรงพยาบาล</th>
+        <th>รุ่นเครื่อง</th>
+        <th>อาการ</th>
+        <th>สถานะ</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- ใส่ DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<!-- ================= Script ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2r2WE9cf6yJWvNjNU99pIQ97oDAgEkqM7YtJeZaFianenFLjpgs3C04J5oUCXdENtBw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEuERbb_GgfbmQlp1u5pe3wbu0TjleM54yWOnLpo9bhN2BN8KNvAGXvfrUw_UfmR6LJg/exec";
 
   const role = localStorage.getItem("userRole");
   const hospital = localStorage.getItem("hospital") || "";
@@ -373,22 +1879,17 @@
   }
 
   function showPage(pageId) {
-  // ซ่อนทุกหน้า
   document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-  // แสดงหน้าที่เลือก
-  //document.getElementById(pageId).classList.remove('hidden');
-
   // ✅ เคลียร์อาการที่ติ๊กไว้ ถ้าเปลี่ยนไปแท็บอื่นที่ไม่ใช่ troubleshoot
   if (pageId !== "troubleshoot") {
     document.querySelectorAll("#symptomForm input[type='checkbox']")
       .forEach(cb => cb.checked = false);
   }
-
   if (pageId === 'home') {
     // แสดง Home ตาม role
     if (role === "customer") {
       document.getElementById("home-customer").classList.remove("hidden");
-    } else if (role === "service") {
+    } else if (role === "service" || role === "technician") {
       document.getElementById("home-technician").classList.remove("hidden");
     }
   } else {
@@ -401,12 +1902,15 @@
   }
    // ✅ ปิด submenu Troubleshoot แค่ตอนเปลี่ยนไปหน้าอื่น
   if (pageId !== 'troubleshoot') {
-    document.querySelectorAll('.submenu-items').forEach(menu => {
+    document.querySelectorAll('.submenu-wrapper, .submenu-box').forEach(menu => {
       menu.classList.add('hidden');
+    });
+    document.querySelectorAll('.arrow').forEach(arrow => {
+      arrow.classList.remove('rotate');
     });
   }
   }
-  document.getElementById("reportForm")?.addEventListener("submit", function(e){
+  document.getElementById("reportForm")?.addEventListener("submit", function(e){ ///////////////////////
     e.preventDefault();
     const data = {
       type: "report",
@@ -421,41 +1925,77 @@
 
     fetch(SCRIPT_URL, {
       method: "POST",
-      //headers: { "Content-Type": "application/json" }, อีควายนี่ทำให้กูต้องกลับช้า อิสัส
       body: JSON.stringify(data)
     })
     .then(res => res.text())
     .then(txt => {
       console.log("Response", txt);
       alert("✅ ส่งรายงานเรียบร้อยแล้ว");
-      //document.getElementById("reportForm").reset();
     })
     .catch(err => alert("❌ Error: " + err));
   });
+
+  function formatThaiDate(isoString) {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    return date.toLocaleString("th-TH", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
   // รีกลับ
   function loadReports() {
-  fetch(SCRIPT_URL + "?type=getReports")
-    .then(res => res.json())
-    .then(data => {
-      const tbody = document.getElementById("reportData");
-      tbody.innerHTML = "";
-      data.forEach(r => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.Timestamp || ""}</td>
-          <td>${r.Hospital || ""}</td>
-          <td>${r.User || ""}</td>
-          <td>${r.Email || ""}</td>
-          <td>${r.Model || ""}</td>
-          <td>${r.SN || ""}</td>
-          <td>${r.Symptom || ""}</td>
-          <td>${r.Phone || ""}</td>
-        `;
-        tbody.prepend(tr);
-      });
-    })
-    .catch(err => console.error("โหลดรายงานล้มเหลว:", err));
-}
+    fetch(SCRIPT_URL + "?type=getReports")
+      .then(res => res.json())
+      .then(data => {
+        const filteredData = data.filter(r => r.Status === "ส่งซ่อม");
+        const tbody = document.getElementById("reportData");
+        tbody.innerHTML = "";
+
+        filteredData.forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td data-fulltext="${formatThaiDate(r.Timestamp) || ""}">${formatThaiDate(r.Timestamp) || ""}</td>
+            <td data-fulltext="${r.Hospital || ""}">${r.Hospital || ""}</td>
+            <td data-fulltext="${r.User || ""}">${r.User || ""}</td>
+            <td data-fulltext="${r.Email || ""}">${r.Email || ""}</td>
+            <td data-fulltext="${r.Model || ""}">${r.Model || ""}</td>
+            <td data-fulltext="${r.SN || ""}">${r.SN || ""}</td>
+            <td data-fulltext="${r.Symptom || ""}">${r.Symptom || ""}</td>
+            <td data-fulltext="${r.Phone || ""}">${r.Phone || ""}</td>
+          `;
+          tbody.prepend(tr);
+        });
+      })
+      .catch(err => console.error("โหลดรายงานล้มเหลว:", err));
+  }
+  // ==== Tooltip แสดงข้อความเต็มแบบสวย ๆ ====
+  document.addEventListener("DOMContentLoaded", () => {
+    const tooltip = document.createElement("div");
+    tooltip.id = "customTooltip";
+    document.body.appendChild(tooltip);
+
+    document.addEventListener("mouseover", (e) => {
+      const cell = e.target.closest("td");
+      if (cell && cell.getAttribute("data-fulltext")) {
+        tooltip.textContent = cell.getAttribute("data-fulltext");
+        tooltip.style.display = "block";
+      }
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      tooltip.style.left = e.pageX + 15 + "px";
+      tooltip.style.top = e.pageY + 15 + "px";
+    });
+
+    document.addEventListener("mouseout", (e) => {
+      if (e.target.closest("td")) tooltip.style.display = "none";
+    });
+  });
 
   function filterReports() {
   const snValue = document.getElementById("searchSN").value.toLowerCase();
@@ -485,7 +2025,6 @@
     }
   });
 }
-
 // ให้ฟังก์ชันทำงานแบบเรียลไทม์ทุกครั้งที่พิมพ์
 document.getElementById("searchSN").addEventListener("input", filterReports);
 document.getElementById("searchUser").addEventListener("input", filterReports);
@@ -498,7 +2037,6 @@ function toggleSubmenu(id) {
 function goToTroubleshoot() {
   // เปิดหน้า troubleshoot
   showPage('troubleshoot');
-  
   // ขยายเมนูย่อยของ troubleshoot อัตโนมัติ
   const submenu = document.getElementById("troubleshoot-submenu");
   submenu.classList.remove("hidden");
@@ -506,12 +2044,20 @@ function goToTroubleshoot() {
 // เมื่อเลือกรุ่นจากเมนูซ้าย
 function selectModel(model) {
   currentModel = model;
+  // เก็บชื่อรุ่น
+  sessionStorage.setItem("model", model);
+  console.log(" เก็บรุ่น:", model);
+
   showPage('troubleshoot'); // เปิดหน้า troubleshoot
-  document.getElementById("selectedModel").textContent = "รุ่น: " + model;
+  document.getElementById("selectedModel").textContent = model;
   document.getElementById("stepSymptoms").classList.remove("hidden");
   document.getElementById("stepSolutions").classList.add("hidden");
   // ซ่อนฟอร์มทั้งหมดก่อน
   document.querySelectorAll("form[id^='symptomForm-']").forEach(f => f.classList.add("hidden"));
+  const allHeaders = document.querySelectorAll("#troubleshoot-header"); 
+  if (allHeaders.length > 1) {
+    allHeaders[1].classList.add("hidden");
+  }
   
   // แสดงฟอร์มของรุ่นที่เลือก
   const form = document.getElementById("symptomForm-" + model);
@@ -526,17 +2072,112 @@ function selectModel(model) {
     form.querySelectorAll("input").forEach(cb => cb.checked = false); // reset
   }
 }
+// เมื่อผู้ใช้เลือก "อาการ"
+function selectSymptom(symptomName) {
+  sessionStorage.setItem("symptom", symptomName);
+  console.log("📦 เก็บอาการ:", symptomName);
+}
+const sharedSteps = {
+  over_under_TOP2300: [
+    { text: "กดปุ่ม IV set แล้วกดปุ่ม เพิ่ม-ลด เพื่อทำการตั้งค่า IV set ให้ตรงกับ IV set ที่ใช้", image: "images/TOP-2300/fix-set-ivset.jpg" },
+    { text: "ทำการหนีบ drop sensor ให้อยู่กึ่งกลาง และ จัดให้ drip chamber อยู่ในแนวตั้ง", image: "images/TOP-2300/fix-drop-sensor.jpg" },
+  ],
+  reset_TOP2300: [
+    { text: "ทำการ reset เครื่อง", image: "" },
+    { text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-er13-step1.jpg" },
+    { text: "ขั้นตอนที่ 2 โดยกดปุ่ม stop limit power ค้างไว้พร้อมกัน", image: "images/TOP-2300/fix-reset-step2.jpg" },
+    { text: "ขั้นตอนที่ 3 หน้าจอแสดงผลจะขึ้น TEST ทำการกด 102 โดยเร็ว แล้วกดปุ่ม start", image: "images/TOP-2300/fix-reset-step3.jpg" },
+    { text: "ขั้นตอนที่ 4 กดปุ่ม power ปิดเครื่องค้างไว้ เพื่อทำการรีเซ็ต", image: "images/TOP-2300/fix-reset-step4.jpg" }
+  ],
+  battery_refresh_TOP2300: [
+    { oder:10.1, text: " ทำ Battery Refresh", image: "" },
+    { oder:10.2,text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step1.jpg" },
+    { oder:10.3,text: "ขั้นตอนที่ 2 ทำการเสียบสาย AC ตลอดการทำ refresh", image: "images/TOP-2300/fix-battery-refresh-step2.jpg" },
+    { oder:10.4,text: "ขั้นตอนที่ 3 กดปุ่ม purge และ clear ค้างไว้พร้อมกัน จากนั้นกดปุ่ม power", image: "images/TOP-2300/fix-battery-refresh-step3.jpg" },
+    { oder:10.5,text: "ขั้นตอนที่ 4 หน้าจอแสดงผลจะขึ้นคำว่า rEFr แสดงถึงการเข้าสู่ refresh mode จากนั้นกดปุ่ม start เพื่อเริ่มทำการรีเฟรช", image: "images/TOP-2300/fix-battery-refresh-step4.jpg" },
+    { oder:10.6,text: "ขั้นตอนที่ 5 หน้าจอแสดงผลจะขึ้นคำว่า diSc จากนั้นจะเริ่มคลายประจุ จนขึ้นคำว่า chAr ", image: "images/TOP-2300/fix-battery-refresh-step5.jpg" },
+    { oder:10.7,text: "ขั้นตอนที่ 6 หน้าจอแสดงผลขึ้นคำว่า chAr แสดงถึงการเริ่มชาร์จประจุ จากนั้นกดปุ่ม power ค้างไว้เพื่อปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step6.jpg" },
+    { oder:10.8,text: "ขั้นตอนที่ 7 ตรวจสอบไฟสถานะ charge แสดงผลปกติหรือไม่", image: "images/TOP-2300/fix-battery-refresh-step7.jpg" },
+  ],
+  bate_TOP2300: [
+    { oder:1, text: "ตรวจสอบว่าแบตเตอรี่ได้ทำการเชื่อมต่อเข้ากับบอร์ดหรือไม่ ถ้าไม่ ให้ทำการเชื่อมต่อแบตเตอรี่เข้ากับบอร์ด", image: "images/TOP-2300/fix-bate-step2.jpg" },
+  ],
+  b0: [
+    { oder:20, text: "ทำการเปลี่ยนแบตเตอรี่", image: "" }
+  ],
+  iv0: [
+    { oder:20, text: "ทำการเปลี่ยนสาย IV set ใหม่", image: "" } 
+  ],
+  over_under_MJ210: [
+    { text: "กดปุ่ม IV set แล้วกดปุ่ม เพิ่ม-ลด เพื่อทำการตั้งค่า IV set ให้ตรงกับ IV set ที่ใช้", image: "images/MJ-210/fix-set-ivset.jpg" },
+    { text: "ทำการหนีบ drop sensor ให้อยู่กึ่งกลาง และ จัดให้ drip chamber อยู่ในแนวตั้ง" , image: "images/MJ-210/fix-drop-sensor.jpg" },
+  ],
+  cal_R860: [
+    { oder:20, text: "ทำการ calibration", image: "" },
+    { oder:20, text: "ขั้นตอนที่1 สัมผัสที่สัญลักษณ์รูปประแจ", image: "images/R860/fix-cal1.jpg" },
+    { oder:20, text: "ขั้นตอนที่2 เลือก configuration", image: "images/R860/fix-cal2.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่3 ใส่รหัส version10 ใส่ 101867 version11 ใส่ 101866", image: "images/R860/fix-cal3.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่4 เลือก calibrations ", image: "images/R860/fix-cal4.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่5 เลือก Air FCV เพื่อทำการแคลิเบรต air flow control valve ", image: "images/R860/fix-cal5.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่6 ทำการ open the inspiratory ตามคำแนะนำ", image: "images/R860/fix-cal6.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่7 ทำการกดที่สัญลักษณ์ลูกศรสีเขียว เพื่อทำการเริ่มแคลิเบรต  แล้วรอสักครู่", image: "images/R860/fix-cal7.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่8 เมื่อมีสัญลักษณ์ ติ๊กถูกแสดงขึ้นมา ให้ทำการกด OK", image: "images/R860/fix-cal8.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่9 เลือก O2 FCV เพื่อทำการแคลิเบรต oxygen flow control valve", image: "images/R860/fix-cal9.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่10 ทำการ open the inspiratory ตามคำแนะนำ", image: "images/R860/fix-cal10.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่11 ทำการกดที่สัญลักษณ์ลูกศรสีเขียว เพื่อทำการเริ่มแคลิเบรต  แล้วรอสักครู่", image: "images/R860/fix-cal11.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่12 ถ้ามีสัญลักษณ์ ติ๊กถูกแสดงขึ้นมา ให้ทำการกด OK", image: "images/R860/fix-cal12.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่13 เลือก Exhalation Valve เพื่อทำการแคลิเบรต exhalation valve", image: "images/R860/fix-cal13.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่14 ให้ทำการ occlude ตามคำแนะนำ", image: "images/R860/fix-cal14.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่15 ทำการกดที่สัญลักษณ์ลูกศรสีเขียว เพื่อทำการเริ่มแคลิเบรต  แล้วรอสักครู่", image: "images/R860/fix-cal15.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่16 ถ้ามีสัญลักษณ์ ติ๊กถูกแสดงขึ้นมา ให้ทำการกด OK", image: "images/R860/fix-cal16.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่17 ทำการกด Exit เพื่อออกจากหน้า calibrations ", image: "images/R860/fix-cal17.jpg" }, 
+    { oder:20, text: "ขั้นตอนที่18 ทำ system check อีกครั้ง", image: "images/R860/fix-cal18.jpg" },  
+  ],
+  cal_VG701_4: [
+    { oder:10.1, text: "ขั้นตอนที่1 เลือก Main Menu", image: "images/VG70/fix-cal1.jpg" },
+    { oder:10.2, text: "ขั้นตอนที่2 เลือก System", image: "images/VG70/fix-cal2.jpg" },
+    { oder:10.3, text: "ขั้นตอนที่3 เลือก Service", image: "images/VG70/fix-cal3.jpg" },
+    { oder:10.4, text: "ขั้นตอนที่4 ใส่รหัส 2012 แล้วกด Confirm", image: "images/VG70/fix-cal4.jpg" },
+  ],
+  cal_VG705_29: [
+    { oder:11.5, text: "ขั้นตอนที่5 เลือก Pressure Sensor ", image: "images/VG70/fix-cal5.jpg" },
+    { oder:11.6, text: "ขั้นตอนที่6 ถอดสาย breathing circuit ตามคำแนะนำ", image: "images/VG70/fix-cal6.jpg" },
+    { oder:11.7, text: "ขั้นตอนที่7 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal7.jpg" },
+    { oder:11.8, text: "ขั้นตอนที่8 เลือก Flow Sensor ", image: "images/VG70/fix-cal8.jpg" },
+    { oder:11.9, text: "ขั้นตอนที่9 ทำการต่อสาย breathing circuit แบบสายเดียว ตามคำแนะนำ", image: "images/VG70/fix-cal9.jpg" },
+    { oder:12.0, text: "ขั้นตอนที่10 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal10.jpg" },
+    { oder:12.1, text: "ขั้นตอนที่11 เลือก O2 Sensor", image: "images/VG70/fix-cal11.jpg" },
+    { oder:12.2, text: "ขั้นตอนที่12 ทำการต่อสาย breathing circuit แบบสายเดียว", image: "images/VG70/fix-cal12.jpg" },
+    { oder:12.3, text: "ขั้นตอนที่13 กด Start 21% เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue และกด Start 100% เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal13.jpg" },
+    { oder:12.4, text: "ขั้นตอนที่14 เลือก Leakaqe Test", image: "images/VG70/fix-cal14.jpg" },
+    { oder:12.5, text: "ขั้นตอนที่15 ทำการต่อสาย breathing circuit แบบสายเดียว ตามคำแนะนำ", image: "images/VG70/fix-cal15.jpg" },
+    { oder:12.6, text: "ขั้นตอนที่16 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal16.jpg" },
+    { oder:12.7, text: "ขั้นตอนที่17 เลือก Inspiratory Valve ", image: "images/VG70/fix-cal17.jpg" },
+    { oder:12.8, text: "ขั้นตอนที่18 ทำการต่อสาย breathing circuit แบบสายเดียว ตามคำแนะนำ", image: "images/VG70/fix-cal18.jpg" },
+    { oder:12.9, text: "ขั้นตอนที่19 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal19.jpg" },
+    { oder:13.0, text: "ขั้นตอนที่20 เลือก Expiratory Valve ", image: "images/VG70/fix-cal20.jpg" },
+    { oder:13.1, text: "ขั้นตอนที่21 ทำการต่อสาย breathing circuit เข้ากับ test lung", image: "images/VG70/fix-cal21.jpg" },
+    { oder:13.2, text: "ขั้นตอนที่22 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal22.jpg" },
+    { oder:13.3, text: "ขั้นตอนที่23 เลือก Breath Circuit Test ", image: "images/VG70/fix-cal23.jpg" },
+    { oder:13.4, text: "ขั้นตอนที่24 ทำการต่อสาย breathing circuit เข้ากับ test lung", image: "images/VG70/fix-cal24.jpg" },
+    { oder:13.5, text: "ขั้นตอนที่25 กด Start เพื่อเริ่มทำการแคลิเบรต รอสักครู่แล้วกด Continue", image: "images/VG70/fix-cal25.jpg" },
+    { oder:13.6, text: "ขั้นตอนที่26 กด กากบาท", image: "images/VG70/fix-cal26.jpg" },
+    { oder:13.7, text: "ขั้นตอนที่27 เลือก Pre-Use Test ", image: "images/VG70/fix-cal27.jpg" },
+    { oder:13.8, text: "ขั้นตอนที่28 ทำการติ๊กถูกทั้งหมดแล้วกด Test บางหัวข้อจะมีคำแนะนำขึ้นมา ให้ทำตามคำแนะนำ ", image: "images/VG70/fix-cal28.jpg" },
+    { oder:13.9, text: "ขั้นตอนที่29 เมื่อเสร็จเรียบร้อยทำการกด Skip", image: "images/VG70/fix-cal29.jpg" },
+  ],
+};
 const solutions = {
   "TOP-2300": {
   "air alarm": {
-    causes: [ "มีฟองอากาศในสาย IV set", "ใส่สาย IV set ไม่พอดี" ],
+    causes: [ "มีฟองอากาศในสาย IV set", "ใส่สาย IV set ไม่พอดี", "air in line sensor มีปัญหา" ],
     causeImage: "images/TOP-2300/fix-air.jpg",
     steps: [
     { text: "ทำการไล่ฟองอากาศออกก่อน โดยกดปุ่ม Purge", image: "images/TOP-2300/fix-purge.jpg" },
     { text: "ทำการตรวจเช็คว่าใส่สาย IV set พอดีหรือไม่ ถ้าไม่ ให้ทำการจัดสาย IV set ใหม่", image: "images/TOP-2300/fix-inset.jpg" }
 ]},
   "empty alarm": {
-    causes: [ " drop sensor ไม่สามารถตรวจจับสารละลายได้", "สารละลายในถุงหมด", "สารละลายเต็ม drip chamber", "ไม่ได้ทำการหนีบ drop sensor" ],
+    causes: [ " drop sensor ไม่สามารถตรวจจับสารละลายได้", "สารละลายในถุงหมด", "สารละลายเต็ม drip chamber", "ไม่ได้ทำการหนีบ drop sensor", "drop sensor มีปัญหา" ],
     causeImage: "images/TOP-2300/fix-empty.jpg",
     steps: [
     { text: "ตรวจสอบสารละลายในถุง", image: "images/TOP-2300/fix-sw.jpg" },
@@ -546,192 +2187,473 @@ const solutions = {
   "free flow": {
     causes: [
       "สารละลายไหลอย่างต่อเนื่อง ทำให้ drop sensor ไม่สามารถตรวจจับการหยดของสารละลายได้",
-      "IV set บางรุ่นแข็งเกินไป ทำให้ clamp ของตัวเครื่องหนีบไม่สนิท ทำให้สารละลายไหลอย่างต่อเนื่อง"
-    ],
+      "IV set บางรุ่นแข็งเกินไป ทำให้ clamp ของตัวเครื่องหนีบไม่สนิท ทำให้สารละลายไหลอย่างต่อเนื่อง"],
     causeImage: "images/TOP-2300/fix-free-flow.jpg",
     steps: [
   { text: "ตรวจสอบ roller clamp ว่าเปิดอยู่หรือไม่ ถ้าเปิดอยู๋ ให้ทำการปิด roller clamp", image: "images/TOP-2300/fix-roller-clamp.jpg" },
-  { text: "ทำการเปลี่ยน IV set" , image: "" }
+          ...sharedSteps.iv0
   ]},
   "over": {
-    causes: [ "จำนวนสารละลายที่หยดใน drip chamber มากกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้" ],
+    causes: [ "จำนวนสารละลายที่หยดใน drip chamber มากกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้", "drip chamber เอียง" ],
     causeImage: "images/TOP-2300/fix-over.jpg",
-    steps: [
-    { text: "ตั้งค่า IV set ให้ตรงกับ IV set ที่ใช้", image: "images/TOP-2300/fix-set-ivset.jpg" },
-    { text: "เปลี่ยน IV set ใหม่", image: "" }
-]},
+    steps: [ ...sharedSteps.over_under_TOP2300, ...sharedSteps.iv0 ]
+},
   "under": {
-      causes: [ "จำนวนสารละลายที่หยดใน drip chamber น้อยกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้" ],
+      causes: [ "จำนวนสารละลายที่หยดใน drip chamber น้อยกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้", "drip chamber เอียง" ],
       causeImage: "images/TOP-2300/fix-under.jpg",
-      steps: [
-      { text: "ตั้งค่า IV set ให้ตรงกับ IV set ที่ใช้", image: "images/TOP-2300/fix-set-ivset.jpg" },
-      { text: "เปลี่ยน IV set ใหม่", image: "" }
-  ]},
+      steps: [ ...sharedSteps.over_under_TOP2300, ...sharedSteps.iv0 ]
+},
   "occlusion alarm": {
-      causes: [ "roller clamp ปิดอยู่ขณะเครื่องทำงาน", "มีการตีบตันหรืออุดตันจากการที่ปิด roller clamp ทิ้งไว้นาน", "สายงอหรือถูกกดทับจากผู้ป่วย" ],
+      causes: [ "roller clamp ปิดอยู่ขณะเครื่องทำงาน", "มีการตีบตันหรืออุดตันจากการที่ปิด roller clamp ทิ้งไว้นาน", "สาย IV set งอหรือถูกกดทับจากผู้ป่วย", "occlusion sensor มีปัญหา" ],
       causeImage: "images/TOP-2300/fix-occlusion.jpg",
       steps: [
       { text: "ตรวจสอบว่า roller clamp เปิดอยู่ขณะเครื่องทำงานหรือไม่ ถ้าไม่ ให้เปิด roller clamp", image: "images/TOP-2300/fix-roller-clamp-open.jpg" },
-      { text: "ตรวจสอบว่ามีการพับ งอ หรือถูกกดทับหรือไม่", image: "" },
-      { text: "เปลี่ยน IV set ใหม่", image: "" }
+      { text: "ตรวจสอบสาย IV set ว่ามีการพับ งอ หรือถูกกดทับหรือไม่", image: "" },
+              ...sharedSteps.iv0
   ]},
   "door": {
-      causes: [ "ฝาหน้าปิดไม่สนิท" ],
+      causes: [ "ฝาหน้าปิดไม่สนิท", "door sensor มีปัญหา" ],
       causeImage: "images/TOP-2300/fix-door.jpg",
       steps: [
       { text: "เปิดปิดฝาหน้าใหม่", image: "" }
   ]},
   "drop": {
-      causes: [ "ไม่ได้ทำการต่อ drop sensor เข้ากับเครื่อง" ],
+      causes: [ "ไม่ได้ทำการเชื่อมต่อ drop sensor เข้ากับเครื่อง", "drop sensor มีปัญหา" ],
       causeImage: "images/TOP-2300/fix-drop.jpg",
       steps: [
       { text: "ตรวจสอบว่าได้ทำการต่อ drop sensor เข้ากับเครื่องหรือไม่ ถ้าไม่ ให้ทำการต่อ drop sensor เข้ากับเครื่อง ", image: "images/TOP-2300/fix-drop-in.jpg" }
       ]},
+  "เสียงแจ้งเตือน ดัง/เบา": {
+      causes: [ "การตั้งค่าเสียง" ],
+      causeImage: "",
+      steps: [
+        { text: "ขั้นตอนที่1 ทำการกดปุ่ม power และ IV set ค้างไว้พร้อมกัน เพื่อเข้าสู่หน้าตั้งค่า", image: "images/TOP-2300/fix-sound1.jpg" },
+        { text: "ขั้นตอนที่2 จอแสดงผลจะขึ้นคำว่า SET และ dA2 ให้ทำการกดปุ่ม rate เปลี่ยนเป็น Vo_ ", image: "images/TOP-2300/fix-sound2.jpg" },
+        { text: "ขั้นตอนที่3 เมื่อจอแสดงผลขึ้นคำว่า Vo_  ให้ทำการกดปุ่มลูกศร เพื่อปรับระดับเสียง โดย Vo2 คือ ดัง Vo0 คือ เบา", image: "images/TOP-2300/fix-sound3.jpg" },
+        { text: "ขั้นตอนที่4 เมื่อทำการปรับค่าเรียบร้อยแล้ว ให้ทำการกดปุ่ม power ปิดเครื่องค้างไว้ เพื่อทำการตั้งค่า", image: "images/TOP-2300/fix-sound4.jpg" },
+    ]},
   "er13": {
       causes: [ "กดปุ่ม Power ค้างไว้นาน ขณะทำการเปิดเครื่อง", "กดปุ่ม start ค้างไว้ ขณะที่เครื่องกำลังทำงาน" ],
       causeImage: "images/TOP-2300/fix-er13.jpg",
-      steps: [
-      { text: "ทำการ reset เครื่อง", image: "" },
-      { text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-er13-step1.jpg" },
-      { text: "ขั้นตอนที่ 2 โดยกดปุ่ม stop limit power ค้างไว้พร้อมกัน", image: "images/TOP-2300/fix-reset-step2.jpg" },
-      { text: "ขั้นตอนที่ 3 หน้าจอแสดงผลจะขึ้น TEST ทำการกด 102 โดยเร็ว แล้วกดปุ่ม start", image: "images/TOP-2300/fix-reset-step3.jpg" },
-      { text: "ขั้นตอนที่ 4 กดปุ่ม power ปิดเครื่องค้างไว้ เพื่อทำการรีเซ็ต", image: "images/TOP-2300/fix-reset-step4.jpg" }
-  ]},   
+      steps: sharedSteps.reset_TOP2300
+    },   
   "er24": {
       causes: [ "บอร์ดทำงานผิดปกติ" ],
       causeImage: "",
-      steps: [
-      { text: "ทำการ reset เครื่อง", image: "" },
-      { text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-er13-step1.jpg" },
-      { text: "ขั้นตอนที่ 2 โดยกดปุ่ม stop limit power ค้างไว้พร้อมกัน", image: "images/TOP-2300/fix-reset-step2.jpg" },
-      { text: "ขั้นตอนที่ 3 หน้าจอแสดงผลจะขึ้น TEST ทำการกด 102 โดยเร็ว แล้วกดปุ่ม start", image: "images/TOP-2300/fix-reset-step3.jpg" },
-      { text: "ขั้นตอนที่ 4 กดปุ่ม power ปิดเครื่องค้างไว้ เพื่อทำการรีเซ็ต", image: "images/TOP-2300/fix-reset-step4.jpg" }
-  ]},
+      steps: sharedSteps.reset_TOP2300
+    },
   "bate": {
       causes: [ "แบตเตอรี่มีปัญหา", "ไม่ได้เสียบแบตเตอรี่เข้ากับบอร์ด" ],
       causeImage: "images/TOP-2300/fix-bate.jpg",
-      steps: [
-      { text: "ตรวจสอบว่าแบตเตอรี่ได้ทำการเสียบเข้ากับบอร์ดหรือไม่ ถ้าไม่ ให้ทำการเสียบแบตเตอรี่เข้ากับบอร์ด", image: "images/TOP-2300/fix-bate-step2.jpg" },
-      { text: "เปลี่ยนแบตเตอรี่", image: "" }
-  ]}, 
+      steps: [ ...sharedSteps.bate_TOP2300, ...sharedSteps.b0 ]
+  }, 
   "ชาร์จแบตเตอรี่ไม่เต็ม": {
       causes: [ "หลายปัจจัย" ],
       causeImage: "images/TOP-2300/fix-batnochage.jpg",
-      steps: [
-      { text: " ทำ Battery Refresh", image: "" },
-      { text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step1.jpg" },
-      { text: "ขั้นตอนที่ 2 ทำการเสียบสาย AC ตลอดทำการ refresh", image: "images/TOP-2300/fix-battery-refresh-step2.jpg" },
-      { text: "ขั้นตอนที่ 3 กดปุ่ม purge และ clear ค้างไว้พร้อมกัน จากนั้นกดปุ่ม power", image: "images/TOP-2300/fix-battery-refresh-step3.jpg" },
-      { text: "ขั้นตอนที่ 4 หน้าจอแสดงผลจะขึ้นคำว่า rEFr แสดงถึงการเข้าสู่ refresh mode จากนั้นกดปุ่ม start เพื่อเริ่มทำการรีเฟรช", image: "images/TOP-2300/fix-battery-refresh-step4.jpg" },
-      { text: "ขั้นตอนที่ 5 หน้าจอแสดงผลจะขึ้นคำว่า diSc จากนั้นจะเริ่มคลายประจุ จนขึ้นคำว่า chAr ", image: "images/TOP-2300/fix-battery-refresh-step5.jpg" },
-      { text: "ขั้นตอนที่ 6 หน้าจอแสดงผลขึ้นคำว่า chAr แสดงถึงการเริ่มชาร์จประจุ จากนั้นกดปุ่ม power ค้างไว้เพื่อปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step6.jpg" },
-      { text: "ขั้นตอนที่ 7 ตรวจสอบไฟสถานะ charge แสดงผลปกติหรือไม่", image: "images/TOP-2300/fix-battery-refresh-step7.jpg" },
-    ]},
-    "ไฟสัญลักษณ์แบตเตอรี่กระพริบ": {
+      steps: [ ...sharedSteps.battery_refresh_TOP2300, ...sharedSteps.b0 ]
+    },
+  "ไฟสัญลักษณ์แบตเตอรี่กระพริบ": {
       causes: [ "กรณีเครื่องใหม่ ยังไม่ได้ทำการชาร์จแบตเตอรี่", "ระบบไม่สามารถตรวจพบแบตเตอรี่", "แบตเตอรี่มีปัญหา" ],
-      causeImage: "images/TOP-2300/fix-batnochage.jpg",
+      causeImage: "images/TOP-2300/fix-bb.jpg",
       steps: [
-      { text: " ทำการชาร์จแบตเตอรี่แล้วสังเกตอาการ ", image: "" },
-      { text: " ตรวจสอบว่าแบตเตอรี่ได้ทำการเสียบเข้ากับบอร์ดหรือไม่ ถ้าไม่ ให้ทำการเสียบแบตเตอรี่เข้ากับบอร์ด ", image: "images/TOP-2300/fix-bate-step2.jpg" },
-      { text: "ทำ Battery Refresh", image: "" },
-      { text: "ขั้นตอนที่ 1 ทำการปิดเครื่องก่อน โดยกดปุ่ม power ค้างเพื่อทำการปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step1.jpg" },
-      { text: "ขั้นตอนที่ 2 ทำการเสียบสาย AC ตลอดทำการ refresh", image: "images/TOP-2300/fix-battery-refresh-step2.jpg" },
-      { text: "ขั้นตอนที่ 3 กดปุ่ม purge และ clear ค้างไว้พร้อมกัน จากนั้นกดปุ่ม power", image: "images/TOP-2300/fix-battery-refresh-step3.jpg" },
-      { text: "ขั้นตอนที่ 4 หน้าจอแสดงผลจะขึ้นคำว่า rEFr แสดงถึงการเข้าสู่ refresh mode จากนั้นกดปุ่ม start เพื่อเริ่มทำการรีเฟรช", image: "images/TOP-2300/fix-battery-refresh-step4.jpg" },
-      { text: "ขั้นตอนที่ 5 หน้าจอแสดงผลจะขึ้นคำว่า diSc จากนั้นจะเริ่มคลายประจุ จนขึ้นคำว่า chAr ", image: "images/TOP-2300/fix-battery-refresh-step5.jpg" },
-      { text: "ขั้นตอนที่ 6 หน้าจอแสดงผลขึ้นคำว่า chAr แสดงถึงการเริ่มชาร์จประจุ จากนั้นกดปุ่ม power ค้างไว้เพื่อปิดเครื่อง", image: "images/TOP-2300/fix-battery-refresh-step6.jpg" },
-      { text: "ขั้นตอนที่ 7 ตรวจสอบไฟสถานะ charge แสดงผลปกติหรือไม่", image: "images/TOP-2300/fix-battery-refresh-step7.jpg" },
+              ...sharedSteps.bate_TOP2300,
+      { oder:2, text: " ทำการชาร์จแบตเตอรี่แล้วสังเกตอาการ ", image: "" },
+              ...sharedSteps.battery_refresh_TOP2300,
+              ...sharedSteps.b0
     ]},
 },
-
   "MJ-210": {
-  "ไฟกระพริบ": {
-    cause: "แบตเตอรี่หมด",
-    causeImage: "images/TOP-2300/fix-test.jpg",
-    steps: [ 
-    { text: "เปลี่ยนฟิวส์หรือเช็คแบตเตอรี่", image: "images/TOP-2300/fix-test.jpg" }
-]}
-}
-};
-
-// ไปหน้าวิธีแก้ไข
-function goToSolutions() {
-  // หา form ตามรุ่นที่เลือก
-  const form = document.getElementById("symptomForm-" + currentModel);
-  if (!form) {
-    alert("ไม่พบฟอร์มของรุ่น: " + currentModel);
-    return;
+  "free flow": {
+    causes: [ "สารละลายไหลอย่างต่อเนื่อง ทำให้ drop sensor ไม่สามารถตรวจจับการหยดของสารละลายได้" ],
+    causeImage: "images/MJ-210/fix-free.jpg",
+    steps: [
+    { text: "ตรวจสอบว่า roller clamp เปิดอยู่หรือไม่ ถ้าเปิดอยู่ ให้ทำการปิด roller clamp", image: "images/MJ-210/fix-roller-clamp.jpg" },
+            ...sharedSteps.iv0
+  ]},
+  "over": {
+      causes: [ "จำนวนสารละลายที่หยดใน drip chamber มากกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้", "drip chamber เอียง" ],
+      causeImage: "images/MJ-210/fix-over.jpg",
+      steps: [ ...sharedSteps.over_under_MJ210, ...sharedSteps.iv0 ]
+    },
+  "under": {
+      causes: [ "จำนวนสารละลายที่หยดใน drip chamber ohvpกว่าที่กำหนด", "ตั้งค่า IV set ไม่ตรงกับ IV set ที่ใช้", "drip chamber เอียง" ],
+      causeImage: "images/MJ-210/fix-under.jpg",
+      steps: [ ...sharedSteps.over_under_MJ210, ...sharedSteps.iv0 ]
+    },
+  "air alarm": {
+      causes: [ "มีฟองอากาศในสาย IV set ", "air in line sensor มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-air.jpg",
+      steps: [
+      { text: "ทำการไล่ฟองอากาศ โดยกดปุ่ม ลูกศร ค้าง", image: "images/MJ-210/fix-purge.jpg" },
+              ...sharedSteps.iv0
+    ]},
+  "occlusion alarm u": {
+      causes: [ "มีการอุดตันของสาย IV set ส่วนบน", "สาย IV set ส่วนบนพับหรืองอ", "occlusion sensor มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-u.jpg",
+      steps: [
+      { text: "ตรวจสอบสาย IV set ว่าส่วนบนมีการพับงอหรือไม่" , image: "images/MJ-210/fix-occlu-u.jpg" },
+              ...sharedSteps.iv0
+    ]},
+  "occlusion alarm l": {
+      causes: [ "มีการอุดตันของสาย IV set ส่วนล่าง", "roller clamp ปิดอยู่ขณะเครื่องทำงาน", "สาย IV set งอหรือถูกกดทับจากผู้ป่วย", "occlusion sensor มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-l.jpg",
+      steps: [
+      { text: "ตรวจสอบว่า roller clamp เปิดอยู่ขณะเครื่องทำงานหรือไม่ ถ้าไม่ ให้เปิด roller clamp", image: "images/MJ-210/fix-roller-clamp-open.jpg" },
+      { text: "ตรวจสอบสาย IV set ว่ามีการพับงอหรือถูกกดทับหรือไม่", image: "" },
+              ...sharedSteps.iv0
+    ]},
+  "empty": {
+      causes: [ " drop sensor ไม่สามารถตรวจจับสารละลายได้", "สารละลายในถุงหมด", "สารละลายเต็ม drip chamber", "ไม่ได้ทำการหนีบ drop sensor", "drop sensor มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-empty.jpg",
+      steps: [
+      { text: "ตรวจสอบสารละลายในถุง", image: "images/MJ-210/fix-sw.jpg" },
+      { text: "ตรวจสอบว่าสารละลายเต็ม drip chamber หรือไม่ ถ้าเต็ม ให้ทำการไล่สารละลายออกก่อน", image: "images/MJ-210/fix-drip-chamber.jpg" },
+      { text: "ตรวจสอบว่าได้ทำการหนีบ drop sensor หรือไม่ ถ้าไม่ ให้ทำการหนีบ drop sensor", image: "images/MJ-210/fix-drop-sensor.jpg" }
+    ]},
+  "drop": {
+      causes: [ "ไม่ได้ทำการเชื่อมต่อ drop sensor เข้ากับเครื่อง", "drop sensor มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-drop.jpg",
+      steps: [
+      { text: "ตรวจสอบว่าได้ทำการเชื่อมต่อ drop sensor เข้ากับเครื่องหรือไม่ ถ้าไม่ ให้ทำการเชื่อมต่อ drop sensor เข้ากับเครื่อง ", image: "images/MJ-210/fix-drop-in.jpg" }
+      ]},
+  "ไฟสัญลักษณ์แบตเตอรี่กระพริบ": {
+      causes: [ "ยังไม่ได้ทำการชาร์จแบตเตอรี่ในกรณีเครื่องใหม่", "ระบบไม่สามารถตรวจพบแบตเตอรี่", "แบตเตอรี่มีปัญหา" ],
+      causeImage: "images/MJ-210/fix-bb.jpg",
+      steps: [
+      { text: "ทำการชาร์จแบตเตอรี่แล้วสังเกตอาการ", image: "" },
+      { text: "ตรวจสอบว่าแบตเตอรี่ได้ทำการเชื่อมต่อเข้ากับบอร์ดหรือไม่ ถ้าไม่ ให้ทำการเชื่อมต่อแบตเตอรี่เข้ากับบอร์ด", image: "images/MJ-210/fix-bba.jpg" },
+              ...sharedSteps.iv0
+    ]},
+  },
+  "MJ-200": {
+  "air alarm": {
+      causes: [ "มีฟองอากาศในสาย IV set ", "air in line sensor มีปัญหา" ],
+      causeImage: "images/MJ-200/fix-air.jpg",
+      steps: [
+      { text: "ทำการไล่ฟองอากาศ โดยกดปุ่ม ลูกศร ค้าง", image: "images/MJ-200/fix-purge.jpg" },
+      { text: "ใส่สาย IV set ใหม่อีกครั้ง" , image: "" }
+    ]},
+  "occlusion alarm u": {
+      causes: [ "มีการอุดตันของสาย IV set ส่วนบน", "สาย IV set ส่วนบนพับหรืองอ", "occlusion sensor มีปัญหา" ],
+      causeImage: "images/MJ-200/fix-u.jpg",
+      steps: [
+      { text: "ตรวจสอบสาย IV set ว่าส่วนบนมีการพับงอหรือไม่" , image: "images/MJ-200/fix-occlu-u.jpg" },
+              ...sharedSteps.iv0
+    ]},
+  "occlusion alarm l": {
+      causes: [ "มีการอุดตันของสาย IV set ส่วนล่าง", "roller clamp ปิดอยู่ขณะเครื่องทำงาน", "สาย IV set งอหรือถูกกดทับจากผู้ป่วย", "occlusion sensor มีปัญหา" ],
+      causeImage: "images/MJ-200/fix-l.jpg",
+      steps: [
+      { text: "ตรวจสอบว่า roller clamp เปิดอยู่ขณะเครื่องทำงานหรือไม่ ถ้าไม่ ให้เปิด roller clamp", image: "images/MJ-200/fix-roller-clamp-open.jpg" },
+      { text: "ตรวจสอบสาย IV set ว่ามีการพับงอหรือถูกกดทับหรือไม่" , image: "" },
+              ...sharedSteps.iv0
+    ]},
+  "ไฟสัญลักษณ์แบตเตอรี่กระพริบ": {
+      causes: [ "ยังไม่ได้ทำการชาร์จแบตเตอรี่ในกรณีเครื่องใหม่", "ระบบไม่สามารถตรวจพบแบตเตอรี่", "แบตเตอรี่มีปัญหา" ],
+      causeImage: "images/MJ-200/fix-bb.jpg",
+      steps: [
+      { text: "ทำการชาร์จแบตเตอรี่แล้วสังเกตอาการ", image: "" },
+      { text: "ตรวจสอบว่าแบตเตอรี่ได้ทำการเชื่อมต่อเข้ากับบอร์ดหรือไม่ ถ้าไม่ ให้ทำการเชื่อมต่อแบตเตอรี่เข้ากับบอร์ด", image: "images/MJ-200/fix-bba.jpg" },
+              ...sharedSteps.b0
+    ]},  
+    },
+  "TOP-5530": {
+  "sensor check": {
+      causes: [ "ใส่ syring ไม่ดี", "sensor ค้าง" ],
+      causeImage: "images/TOP-5530/fix-sensor-check.jpg",
+      steps: [
+      { text: "ทำการถอด syringe แล้วใส่ syring ใหม่อีกครั้ง", image: "" },
+  ]},
+  "user syringe": {
+      causes: [ "syringe บางรุ่นไม่สามารถตรวจจับได้" ],
+      causeImage: "images/TOP-5530/fix-user-syringe.jpg",
+      steps: [
+      { text: "ขั้นตอนที่1 ทำการกดปุ่ม power on/off ค้างไว้เพื่อทำการปิดเครื่อง", image: "images/TOP-5530/fix-user-syringe1.jpg" },
+      { text: "ขั้นตอนที่2 ทำการกดปุ่ม F และปุ่ม power on/off ค้างไว้พร้อมกัน เพื่อเข้าสู่ Extra Mode", image: "images/TOP-5530/fix-user-syringe2.jpg" },
+      { text: "ขั้นตอนที่3 เมื่อเข้าสู่ Extra Mode ให้ทำการกดปุ่มลูกศรลง", image: "images/TOP-5530/fix-user-syringe3.jpg" },
+      { text: "ขั้นตอนที่4 ทำการกดปุ่มหมายเลข 1 เพื่อเข้าสู่หน้า User Syringe", image: "images/TOP-5530/fix-user-syringe4.jpg" },
+      { text: "ขั้นตอนที่5 ทำการเลือกขนาดของ syringe ที่ใช้งาน", image: "images/TOP-5530/fix-user-syringe5.jpg" },
+      { text: "ขั้นตอนที่6 เมื่อขึ้นหน้านี้ให้รอสักครู่", image: "images/TOP-5530/fix-user-syringe6.jpg" },
+      { text: "ขั้นตอนที่7 เมื่อขึ้นหน้านี้ให้ทำการกดปุ่ม start/stop เพื่อเริ่มทำการตรวจจับ syringe", image: "images/TOP-5530/fix-user-syringe7.jpg" },
+      { text: "ขั้นตอนที่8 หน้าจอแสดงผลจะขึ้นว่า Now Measuring แสดงถึงการตรวจจับ syringe", image: "images/TOP-5530/fix-user-syringe8.jpg" },
+      { text: "ขั้นตอนที่9 เครื่องจะค่อยๆทำการดัน syringe จนสุด", image: "images/TOP-5530/fix-user-syringe9.jpg" },
+      { text: "ขั้นตอนที่10 เมื่อจอแสดงผลขึ้น Completed แสดงถึงการตรวจจับสำเร็จ ให้ทำการกดปุ่ม OK หมายเลข 1 และกดปุ่ม power on/off ค้างไว้เพื่อปิดเครื่อง", image: "images/TOP-5530/fix-user-syringe10.jpg" },
+      { text: "ขั้นตอนที่11 ทำการกดปุ่ม power on/off ค้างไว้เพื่อทำการเปิดเครื่อง", image: "images/TOP-5530/fix-user-syringe11.jpg" },
+      { text: "ขั้นตอนที่12 ทำการกดปุ่มลูกศรลง", image: "images/TOP-5530/fix-user-syringe12.jpg" },
+      { text: "ขั้นตอนที่13 ทำการกดปุ่ม USER หมายเลข 4 เพื่อใช้ syringe ที่เราทำการตั้งค่าไว้", image: "images/TOP-5530/fix-user-syringe13.jpg" },
+      { text: "ขั้นตอนที่14 ทำการกดปุ่ม OK หมายเลข 1 ", image: "images/TOP-5530/fix-user-syringe14.jpg" },
+      { text: "ขั้นตอนที่15 ทำการเลือกหน่วยที่จะใช้", image: "images/TOP-5530/fix-user-syringe15.jpg" },
+      { text: "ขั้นตอนที่16 จอแสดงผลจะขึ้นชื่อ syringe เป็น USER ", image: "images/TOP-5530/fix-user-syringe16.jpg" },
+  ]},
+  "ชาร์จแบตเตอรี่ไม่เต็ม": {
+      causes: [ "หลายปัจจัย" ],
+      causeImage: "images/TOP-5530/fix-battery-refresh.jpg",
+      steps: [
+      { text: "ทำ Battery Refresh ", image: "" },
+      { text: "ขั้นตอนที่1 ทำการปิดเครื่องก่อนโดยกดปุ่ม power on/off ค้างไว้เพื่อทำการปิดเครื่อง", image: "images/TOP-5530/fix-battery-refresh-step1.jpg" },
+      { text: "ขั้นตอนที่2 ทำการเสียบสาย AC ตลอดการทำ refresh", image: "images/TOP-5530/fix-battery-refresh-step2.jpg" },
+      { text: "ขั้นตอนที่3 ทำการกดปุ่ม F และปุ่ม power on/off ค้างไว้พร้อมกัน เพื่อเข้าสู่ Extra Mode", image: "images/TOP-5530/fix-battery-refresh-step3.jpg" },
+      { text: "ขั้นตอนที่4 เมื่อเข้าสู่ Extra Mode ให้ทำการกดปุ่มหมายเลข 2 เพื่อเข้าสู่ Maintenance Mode", image: "images/TOP-5530/fix-battery-refresh-step4.jpg" },
+      { text: "ขั้นตอนที่5 เมื่อเข้าสู่ Maintenance Mode ให้ทำการกดปุ่มหมายเลข 1 เพื่อทำการ refresh ", image: "images/TOP-5530/fix-battery-refresh-step5.jpg" },
+      { text: "ขั้นตอนที่6 หน้าจอแสดงผลจะขึ้นค่า Count ให้ทำการกดปุ่ม Start หมายเลข 1 เพื่อเริ่มทำการ refresh", image: "images/TOP-5530/fix-battery-refresh-step6.jpg" },
+      { text: "ขั้นตอนที่7 หน้าจอแสดงผลจะขึ้น Discharge แสดงถึงการคลายประจุ ค่า Count จะค่อยๆลดลงจนเหลือ 0 จนหน้าจอดับลง", image: "images/TOP-5530/fix-battery-refresh-step7.jpg" },
+      { text: "ขั้นตอนที่8 ทำการเปิดเครื่องแล้วสังเกตตรงคำว่า charge ว่ามีไฟสถานะขึ้นหรือไม่ และสังเกตสัญลักษณ์รูปแบตเตอรี่ว่ามี ขีด ขึ้นหรือไม่ ", image: "images/TOP-5530/fix-battery-refresh-step8.jpg" }
+    ]},
+  },
+  "HF-75A": {
+  "check pipeline": {
+      causes: [ "เชื่อมต่อ circuit ไม่พอดี", "circuit มีปัญหา", "" ],/////////////////////
+      causeImage: "images/HF-75A/fix-pipeline.jpg",
+      steps: [
+      { text: "ทำการเชื่อมต่อ circuit ใหม่", image: "images/HF-75A/fix-circuit.jpg" },
+      { text: "ทำการเปลี่ยน circuit ใหม่", image: "" }
+    ]},
+    },
+  "R860": {
+  "paw transducer faill": {
+      causes: [ "circuit เกิดการรั่วไหลของอากาศ", "Exhalation Valve มีปัญหา" ],
+      causeImage: "images/R860/fix-paw.jpg",
+      steps: [
+      { text: "ทำการตรวจเช็ค circuit เช่น สาย breath circuit , humidifier", image: "" },
+      { text: "ทดสอบโดยการต่อ circuit แบบเส้นเดียว ถ้า system check ผ่าน แสดงว่าเป็นที่การต่อสาย breath circuit ไม่ดีหรือเป็นที่ humidifier", image: "images/R860/fix-short.jpg" },
+      { text: "ทำการเปลี่ยน Exhalation Valve", image: "images/R860/fix-ex-valve.jpg" },
+    ]},
+  "relief valve faill": {
+      causes: [ "flow valve control ทำงานผิดปกติ" ],
+      causeImage: "images/R860/fix-relief.jpg",
+      steps: sharedSteps.cal_R860
+    },
+  "exhalation valve faill": {
+      causes: [ "exhalation valve ทำงานผิดปกติ" ],
+      causeImage: "images/R860/fix-exhalation.jpg",
+      steps: sharedSteps.cal_R860
+    },
+  "expiratory flow sensor faill": {
+      causes: [ "flow sensor ทำงานผิดปกติ", "ใส่ flow sensor ไม่พอดี" ],
+      causeImage: "images/R860/fix-expiratory.jpg",
+      steps: [
+      { text: "ทำการใส่ flow sensor ให้พอดี ", image: "images/R860/fix-flow-sensor.jpg" },
+      { text: "ทำการเปลี่ยน flow sensor ", image: "" },
+    ]},
+  "air flow sensor faill": {
+      causes: [ "air flow sensor ทำงานผิดปกติ" ],
+      causeImage: "images/R860/fix-air-flow-sensor.jpg",
+      steps: sharedSteps.cal_R860
+    },
+  "oxygen sensor faill": {
+      causes: [ "oxygen sensor ทำงานผิดปกติ" ],
+      causeImage: "images/R860/fix-oxygen-sensor.jpg",
+      steps: sharedSteps.cal_R860
+    },
+  "o2 flow sensor faill": {
+      causes: [ "oxygen flow sensor ทำงานผิดปกติ" ],
+      causeImage: "images/R860/fix-o2-sensor.jpg",
+      steps: sharedSteps.cal_R860
+    },
+  "resistance faill": {
+      causes: [ "สาย circuit เก่า หรือ เสื่อมสภาพ" ],
+      causeImage: "images/R860/fix-air-resistance.jpg",
+      steps: [
+        { text: "ทำการเปลี่ยนสาย breath circuit", image: "" }, 
+    ]},
+  "circuit measurements faill": {
+      causes: [ "circuit เกิดการรั่วไหลของอากาศ" ],
+      causeImage: "images/R860/fix-circuit-measureents.jpg",
+      steps: [
+      { text: "ทำการตรวจเช็ค circuit เช่น สาย breath circuit , humidifier", image: "" },
+      { text: "ทดสอบโดยการต่อ circuit แบบเส้นเดียว ถ้า system check ผ่าน แสดงว่าเป็นที่การต่อสาย breath circuit ไม่ดีหรือเป็นที่ humidifier", image: "images/R860/fix-short.jpg" },
+    ]},
+  "จอสัมผัสไม่ตรงตำแหน่ง": {
+      causes: [ "จอสัมผัสเพี้ยน" ],
+      causeImage: "",
+      steps: [
+        { text: "ขั้นตอนที่1 สัมผัสที่สัญลักษณ์รูปประแจ", image: "images/R860/fix-t1.jpg" },
+        { text: "ขั้นตอนที่2 เลือก service", image: "images/R860/fix-t2.jpg" },
+        { text: "ขั้นตอนที่3 ใส่รหัส version10 ใส่ 189004 version11 ใส่ 189003", image: "images/R860/fix-t3.jpg" },
+        { text: "ขั้นตอนที่4 เลือก calibrations", image: "images/R860/fix-t4.jpg" },
+        { text: "ขั้นตอนที่5 เลือก Touchscreen แล้วทำการกดที่สัญลักษณ์ลูกศรสีเขียว เพื่อทำการเริ่มแคลิเบรต", image: "images/R860/fix-t5.jpg" },
+        { text: "ขั้นตอนที่6 ให้ทำการสัมผัสที่รูป + โดยให้สัมผัสจุดตรงกลางเพื่อความแม่นยำ", image: "images/R860/fix-t6.jpg" },
+        { text: "ขั้นตอนที่7 ทำการกดที่ accept ", image: "images/R860/fix-t7.jpg" },
+        { text: "ขั้นตอนที่8 เมื่อมีสัญลักษณ์ ติ๊กถูกแสดงขึ้นมา ให้ทำการกด OK", image: "images/R860/fix-t8.jpg" },
+        { text: "ขั้นตอนที่9 ทำการเปิดเครื่อง แล้วรอสักครู่ค่อยทำการเปิดเครื่อง", image: "images/R860/fix-t9.jpg" }, 
+    ]},
+  "ปิดเครื่องไม่ได้": {
+      causes: [ "ทำการปิดสวิตช์เครื่องด้านหลัง โดยที่เครื่องยังทำงานอยู่ ไม่ได้อยู่ใน standby mode" ],
+      causeImage: "images/R860/fix-off.jpg",
+      steps: [
+        { text: "ขั้นตอนที่1 ทำการเปิดสวิตช์ แล้วกดที่ STANDBY", image: "images/R860/fix-off1.jpg" },
+        { text: "ขั้นตอนที่2 ทำการกดที่ Pause Ventilation", image: "images/R860/fix-off2.jpg" },
+        { text: "ขั้นตอนที่3 ทำการปิดเครื่อง", image: "images/R860/fix-off3.jpg" },
+    ]},
+    },
+  "VG70": {
+  "leak test faill": {
+      causes: [ "circuit เกิดการรั่วไหลของอากาศ", "Expiratory Valve ทำงานผิดปกติ" ],
+      causeImage: "images/VG70/fix-leak-test.jpg",
+      steps: [
+      { text: "ทำการตรวจเช็ค circuit เช่น สาย breath circuit , humidifier", image: "" },
+      { text: "ทดสอบโดยการต่อ circuit แบบเส้นเดียว ถ้า system check ผ่าน แสดงว่าเป็นที่การต่อสาย circuit ไม่ดีหรือเป็นที่ humidifier", image: "images/VG70/fix-short.jpg" },
+      { text: "ทำการ calibration ตามขั้นตอน โดยตรวจสอบว่า expiratory valve ผ่านการปรับเทียบหรือไม่ ", image: "" },
+              ...sharedSteps.cal_VG701_4, ...sharedSteps.cal_VG705_29,
+      { oder:15.1, text: "ทำความสะอาด expiratory valve ", image: "" },
+      { oder:15.2, text: "ขั้นตอนที่1 กดที่สัญลักษณ์รูปแม่กุญแจ แล้วนำ expiratory valve ออกมา", image: "images/VG70/fix-clean1.jpg" },
+      { oder:15.3, text: "ขั้นตอนที่2 นำอุปกรณ์มาจิ้มสองจุดนี้ แล้วทำการหมุน", image: "images/VG70/fix-clean2.jpg" },
+      { oder:15.4, text: "ขั้นตอนที่3 นำ ไดอาแฟรม(diaphram) ออกมา", image: "images/VG70/fix-clean3.jpg" },
+      { oder:15.5, text: "ขั้นตอนที่4 ทำการถอดส่วนอื่นๆ ตามรูป", image: "images/VG70/fix-clean4.jpg" },
+      { oder:15.6, text: "ขั้นตอนที่5 นำไปแช่ใน alcohol แช่ไว้สักพัก", image: "" },
+      { oder:15.7,text: "ขั้นตอนที่6 ทำการผึ่งหรือเช็ดให้แห้ง แล้วทำการประกอบกลับ", image: "" },     
+    ]},
+  "flow sensor test faill": {
+      causes: [ "flow sensor ทำงานผิดปกติ" ],
+      causeImage: "images/VG70/fix-flow-sensor-test.jpg",
+      steps: [
+      { text: "ทำการ calibration ตามขั้นตอน โดยตรวจสอบว่า flow sensor และ inspiratory valve ผ่านการปรับเทียบหรือไม่", image: "" },
+              ...sharedSteps.cal_VG701_4, ...sharedSteps.cal_VG705_29
+      ]},
+  "pressure sensor test faill": {
+      causes: [ "pressure sensor ทำงานผิดปกติ" ],
+      causeImage: "images/VG70/fix-pressure-sensor-test.jpg",
+      steps: [
+      { text: "ทำการ calibration ตามขั้นตอน โดยตรวจสอบว่า pressure sensor ผ่านการปรับเทียบหรือไม่", image: "" },
+              ...sharedSteps.cal_VG701_4, ...sharedSteps.cal_VG705_29
+      ]},
+  "oxygen concentration below 18% alarm": {
+      causes: [ "oxygen sensor ไม่ได้ทำการเชื่อมต่อ" ],
+      causeImage: "images/VG70/fix-ox.jpg",
+      steps: [
+      { text: "ทำการเชื่อมต่อ oxygen sensor", image: "images/VG70/fix-oxygen-sensor.jpg" },
+      ]},
+  "จอสัมผัสไม่ตรงตำแหน่ง": {
+      causes: [ "จอสัมผัสเพี้ยน" ],
+      causeImage: "",
+      steps: [
+              ...sharedSteps.cal_VG701_4,
+      { oder:15.1, text: "ขั้นตอนที่5 เลือก Touch Screen แล้วกด Start", image: "images/VG70/fix-touch5.jpg" },
+      { oder:15.2, text: "ขั้นตอนที่6 เลือก 25 pts Cal ", image: "images/VG70/fix-touch6.jpg" },
+      { oder:15.3, text: "ขั้นตอนที่7 ให้ทำการสัมผัสที่รูป + โดยให้สัมผัสจุดตรงกลางเพื่อความแม่นยำ", image: "images/VG70/fix-touch7.jpg" },
+      ]},
   }
-    // เช็คว่าเลือก checkbox อะไรไว้บ้าง
-  const checked = Array.from(form.querySelectorAll("input:checked"))
-    .map(cb => cb.value);
-  //const checked = Array.from(document.querySelectorAll("#symptomForm input:checked"))
-  //  .map(cb => cb.value);
+  };
+
+function getUniqueItems(items) {
+  return Array.from(new Set(items.map(i => JSON.stringify(i)))).map(i => JSON.parse(i));
+}
+function goToSolutions() {
+  const form = document.getElementById("symptomForm-" + currentModel);
+  if (!form) return alert("ไม่พบฟอร์มของรุ่น: " + currentModel);
+
+  const checked = Array.from(form.querySelectorAll("input:checked")).map(cb => cb.value);
   const solutionList = document.getElementById("solutionList");
   solutionList.innerHTML = "";
-  const solutionImages = document.getElementById("solutionImages");
-  solutionImages.innerHTML = "";
 
-  if (checked.length === 0) {
-    alert("กรุณาเลือกอาการอย่างน้อย 1 ข้อ");
-    return;
-  }
-  // แนบรูปตัวอย่าง
-// ดึงข้อมูลวิธีแก้ + รูปตามอาการ
-checked.forEach(symptom => {
-  if (solutions[currentModel] && solutions[currentModel][symptom]) {
-    const data = solutions[currentModel][symptom];
-    // แสดงหัวข้อวิธีแก้ของอาการ
-      const header = document.createElement("h4");
-      header.textContent = `วิธีแก้ไขอาการ: ${symptom}`;
-      solutionList.appendChild(header);
+  if (checked.length === 0) return alert("กรุณาเลือกอาการอย่างน้อย 1 ข้อ");
 
-    // แสดงสาเหตุ (หลายข้อ)
-  if (data.causes && data.causes.length > 0) {
-    const causeHeader = document.createElement("p");
-    causeHeader.textContent = "สาเหตุเกิดจาก:";
-    solutionList.appendChild(causeHeader);
+  let allCauses = [];
+  let allSteps = [];
+  let allCauseImages = [];
 
-    const causeList = document.createElement("ul");
-    data.causes.forEach(c => {
-      const li = document.createElement("li");
-      li.textContent = c;
-      causeList.appendChild(li);
-    });
-    solutionList.appendChild(causeList);
-  }
-
-  // แสดงรูปสาเหตุ
-  if (data.causeImage) {
-    const causeImg = document.createElement("img");
-    causeImg.src = data.causeImage;
-    causeImg.style.maxWidth = "300px";
-    causeImg.style.display = "block";
-    causeImg.style.marginBottom = "20px";
-    solutionList.appendChild(causeImg);
-  }
-
-      // วนแสดงขั้นตอน
-      solutions[currentModel][symptom].steps.forEach((step, index) => {
-        const stepDiv = document.createElement("div");
-        stepDiv.style.marginBottom = "20px";
-
-        // ข้อความ
-        const p = document.createElement("p");
-        p.textContent = step.text;
-        stepDiv.appendChild(p);
-
-        // รูป
-        const img = document.createElement("img");
-        img.src = step.image;
-        img.style.maxWidth = "300px";
-        img.style.display = "block";
-        img.style.marginBottom = "10px";
-        stepDiv.appendChild(img);
-
-        solutionList.appendChild(stepDiv);
+  checked.forEach(symptom => {
+    const data = solutions[currentModel]?.[symptom];
+    if (!data) return;
+    if (data.causes) {
+      data.causes.forEach(cause => {
+        allCauses.push({ symptom, cause });
       });
     }
+    if (data.causeImage && !allCauseImages.includes(data.causeImage)) {
+      allCauseImages.push(data.causeImage);
+    }
+    if (data.steps) allSteps = allSteps.concat(data.steps);
+  });
+
+  allSteps.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  const uniqueCauses = Array.from(new Map(allCauses.map(item => [item.cause, item])).values());
+  const uniqueSteps = Array.from(new Map(allSteps.map(s => [JSON.stringify(s), s])).values());
+
+  const mainBox = document.createElement("div");
+  mainBox.classList.add("solution-card");
+
+  const mainHeader = document.createElement("h2");
+  mainHeader.innerHTML = `<i class="bi bi-lightbulb-fill"></i> วิธีแก้ไขเบื้องต้น`;
+  mainBox.appendChild(mainHeader);
+
+  const mainDesc = document.createElement("p");
+    mainDesc.classList.add("solution-desc");
+    mainDesc.innerHTML = `
+      - กรุณาทำตามลำดับจากบนลงล่าง หากวิธีแรกไม่ได้ผลให้ลองวิธีถัดไป<br> 
+      - หากแก้ไขไม่สำเร็จให้กดที่ <b>ไม่สำเร็จ</b><br>    
+      - หากแก้ไขสำเร็จให้กดที่ <b>สำเร็จ</b><br> 
+    `;
+    mainBox.appendChild(mainDesc);
+
+  if (uniqueCauses.length > 0 || allCauseImages.length > 0) {
+    const causeHeader = document.createElement("h4");
+    causeHeader.innerHTML = `<i class="bi bi-tools"></i> สาเหตุที่เกิดจาก:`;
+    mainBox.appendChild(causeHeader);
+
+    const causeList = document.createElement("ul");
+    uniqueCauses.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.cause;
+      causeList.appendChild(li);
+    });
+    mainBox.appendChild(causeList);
+
+    allCauseImages.forEach(imgPath => {
+      if (imgPath && imgPath.trim() !== "") {
+        const img = document.createElement("img");
+        img.src = imgPath;
+        img.classList.add("solution-img");
+        mainBox.appendChild(img);
+      }
+    });
+  }
+
+  solutionList.appendChild(mainBox);
+
+  // ✅ สร้างกล่องย่อย “วิธีแก้ไข”
+  uniqueSteps.forEach((step, index) => {
+    const stepBox = document.createElement("div");
+    stepBox.classList.add("solution-card");
+
+    if (index === 0) {
+      const stepHeader = document.createElement("h4");
+      stepHeader.innerHTML = `<i class="bi bi-lightbulb"></i> วิธีแก้ไข:`;
+      stepBox.appendChild(stepHeader);
+    }
+
+    const p = document.createElement("p");
+    p.textContent = step.text;
+    stepBox.appendChild(p);
+
+    if (step.image && step.image.trim() !== "") {
+      const img = document.createElement("img");
+      img.classList.add("solution-img");
+      img.src = step.image;
+      stepBox.appendChild(img);
+    }
+
+    // ✅ ถ้าเป็น “กล่องสุดท้าย” → เพิ่มปุ่มตรงนี้เลย
+    if (index === uniqueSteps.length - 1) {
+      const buttonContainer = document.createElement("div");
+      buttonContainer.classList.add("solution-buttons");
+
+      buttonContainer.innerHTML = `
+        <div class="button-card">
+          <div class="button-row top-row">
+            <button class="btn btn-success" onclick="markSuccess()"><i class="bi bi-check"></i> สำเร็จ</button>
+            <button class="btn btn-danger" onclick="markFail()"><i class="bi bi-x"></i> ไม่สำเร็จ</button>
+          </div>
+          <div class="button-row bottom-row">
+            <button class="btn btn-secondary" onclick="backToSymptoms()"><i class="bi bi-arrow-left"></i> ย้อนกลับ</button>
+          </div>
+        </div>
+      `;
+      stepBox.appendChild(buttonContainer);
+    }
+
+    solutionList.appendChild(stepBox);
   });
 
   document.getElementById("stepSymptoms").classList.add("hidden");
@@ -743,9 +2665,51 @@ function backToSymptoms() {
   document.getElementById("stepSymptoms").classList.remove("hidden");
   document.getElementById("resultMessage").innerHTML = "";
 }
-function markSuccess() {
-  const resultDiv = document.getElementById("resultMessage");
-  resultDiv.innerHTML = '<p style="color:green; font-weight:bold;">✅ การแก้ไขสำเร็จแล้ว</p>';
+// ✅ ฟังก์ชันเมื่อกด "สำเร็จ"
+async function markSuccess() {
+  const url = "https://script.google.com/macros/s/AKfycbxEuERbb_GgfbmQlp1u5pe3wbu0TjleM54yWOnLpo9bhN2BN8KNvAGXvfrUw_UfmR6LJg/exec";
+  // ✅ ดึงข้อมูลจาก local/sessionStorage
+  const hospital = localStorage.getItem("hospital") || "ไม่ทราบโรงพยาบาล";
+  const model = sessionStorage.getItem("model") || "ไม่ทราบรุ่น";
+
+  // ✅ ดึงค่าจาก checkbox ทั้งหมดที่ถูกเลือก
+  const selectedSymptoms = [...document.querySelectorAll('input[name="symptom"]:checked')]
+  .map(cb => cb.parentElement.textContent.trim());
+
+  if (selectedSymptoms.length === 0) {
+    alert("กรุณาเลือกอาการอย่างน้อย 1 รายการ");
+    return;
+  }
+
+  console.log("📋 อาการที่เลือกทั้งหมด:", selectedSymptoms);
+
+  try {
+    for (let symptom of selectedSymptoms) {
+      // ✅ สร้าง FormData สำหรับแต่ละอาการ
+      const formData = new FormData();
+      formData.append("type", "stats");
+      formData.append("hospital", hospital);
+      formData.append("model", model);
+      formData.append("symptom", symptom);
+      formData.append("status", "สำเร็จ");
+
+      console.log("📤 กำลังส่งข้อมูล (แบบฟอร์ม):", Object.fromEntries(formData.entries()));
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData
+      });
+
+      const text = await response.text();
+      console.log(`📥 บันทึก "${symptom}" ตอบกลับจาก Apps Script:`, text);
+    }
+
+    alert("✅ บันทึกข้อมูลสำเร็จทั้งหมดแล้ว!");
+
+  } catch (err) {
+    console.error("❌ Error:", err);
+    alert("❌ เกิดข้อผิดพลาด: " + err.message);
+  }
 }
 function markFail() {
   // ซ่อนหน้าวิธีแก้
@@ -758,6 +2722,381 @@ function goBackToSolutions() {
   document.getElementById("failPage").classList.add("hidden");
   document.getElementById("stepSolutions").classList.remove("hidden");
 }
+
+  async function loadStatistics() {
+  const url =
+    "https://script.google.com/macros/s/AKfycbxEuERbb_GgfbmQlp1u5pe3wbu0TjleM54yWOnLpo9bhN2BN8KNvAGXvfrUw_UfmR6LJg/exec?type=getReports";
+  let data = [];
+
+  try {
+    const res = await fetch(url);
+    data = await res.json();
+    console.log("✅ ดึงข้อมูลสถิติสำเร็จ:", data.length, "แถว");
+  } catch (err) {
+    console.error("❌ โหลดข้อมูลจากชีตไม่สำเร็จ:", err);
+    return;
+  }
+  // ✅ ตั้งค่าพื้นฐาน Chart.js ให้รองรับทุกเวอร์ชัน
+if (typeof Chart !== "undefined" && Chart.defaults) {
+  // ฟอนต์และสีรวม
+  if (Chart.defaults.font) {
+    Chart.defaults.font.size = 15;
+    Chart.defaults.font.family = "'Prompt', sans-serif";
+  }
+  
+  // สีตัวอักษรหลัก
+  if (Chart.defaults.color !== undefined) {
+    Chart.defaults.color = "#ffffff";
+  }
+
+  // ชื่อกราฟ
+  if (Chart.defaults.plugins?.title) {
+    Chart.defaults.plugins.title.font = { size: 14 };
+    Chart.defaults.plugins.title.color = "#ffffff";
+  }
+
+  // คำอธิบายใต้กราฟ
+  if (Chart.defaults.plugins?.legend?.labels) {
+    Chart.defaults.plugins.legend.labels.font = { size: 12 };
+    Chart.defaults.plugins.legend.labels.color = "#ffffff";
+  }
+}
+  // ====== วิเคราะห์ข้อมูลสำหรับกราฟ ======
+  const hospitalCount = {};
+  const modelCount = {};
+  const symptomCount = {};
+  const monthCount = {};
+  const statusColors = { สำเร็จ: "#3b82f6", ส่งซ่อม: "#facc15" };
+  const chartColors = {
+  //success: "#38bdf8",  // ฟ้า (สำเร็จ)
+  //repair: "#fbbf24",   // เหลืองส้ม (ส่งซ่อม)
+  
+};
+
+  data.forEach((row) => {
+    const status = row.Status || "ส่งซ่อม";
+    const month = new Date(row.Timestamp).toLocaleString("th-TH", { month: "short" });
+
+    hospitalCount[row.Hospital] ??= { สำเร็จ: 0, ส่งซ่อม: 0 };
+    modelCount[row.Model] ??= { สำเร็จ: 0, ส่งซ่อม: 0 };
+    symptomCount[row.Symptom] ??= { สำเร็จ: 0, ส่งซ่อม: 0 };
+    monthCount[month] ??= { สำเร็จ: 0, ส่งซ่อม: 0 };
+
+    hospitalCount[row.Hospital][status]++;
+    modelCount[row.Model][status]++;
+    symptomCount[row.Symptom][status]++;
+    monthCount[month][status]++;
+  });
+  // ✅ ฟังก์ชันเลือก Top 5
+  function getTopFive(dataObj) {
+    return Object.entries(dataObj)
+      .sort((a, b) => {
+        const totalA = (a[1]["สำเร็จ"] || 0) + (a[1]["ส่งซ่อม"] || 0);
+        const totalB = (b[1]["สำเร็จ"] || 0) + (b[1]["ส่งซ่อม"] || 0);
+        return totalB - totalA;
+      })
+      .slice(0, 5);
+  }
+
+  // ====== เรียกวาดกราฟ ======
+  lineChart(
+    document.getElementById("trendChart"),
+    "แนวโน้มการแจ้งปัญหาตามเวลา",
+    Object.keys(monthCount),
+    Object.values(monthCount).map((v) => v["สำเร็จ"]),
+    Object.values(monthCount).map((v) => v["ส่งซ่อม"])
+  );
+
+  stackedBar(
+    document.getElementById("hospitalChart"),
+    "โรงพยาบาลที่พบปัญหามากสุด (Top 5)",
+    getTopFive(hospitalCount)
+  );
+
+  stackedBar(
+    document.getElementById("modelChart"),
+    "รุ่นเครื่องที่พบปัญหามากสุด (Top 5)",
+    getTopFive(modelCount)
+  );
+
+  pieChart(
+    document.getElementById("symptomSuccessChart"),
+    document.getElementById("symptomRepairChart"),
+    getTopFive(symptomCount)
+  );
+
+  // ====== ตาราง DataTable ======
+  try {
+    $("#statTable").DataTable({
+  data: data,
+  columns: [
+    {
+  data: "Timestamp",
+  title: "วันที่",
+  className: "dt-center",
+  render: function (data) {
+    return formatThaiDate(data);
+  },
+},
+    { data: "Hospital", title: "โรงพยาบาล", className: "dt-center" },
+    { data: "Model", title: "รุ่นเครื่อง", className: "dt-center" },
+    { data: "Symptom", title: "อาการ", className: "dt-center" },
+    {
+      data: "Status",
+      title: "สถานะ",
+      className: "dt-center",
+      render: function (data, type, row) {
+        if (type === "display") {
+          if (data === "สำเร็จ") {
+            return `<span class="status-badge status-success">${data}</span>`;
+          } else if (data === "ส่งซ่อม") {
+            return `<span class="status-badge status-repair">${data}</span>`;
+          } else {
+            return `<span class="status-badge status-other">${data || "-"}</span>`;
+          }
+        }
+        return data;
+      },
+    },
+  ],
+  pageLength: 10,
+  destroy: true,
+});
+  } catch (error) {
+    console.error("❌ โหลด DataTable ไม่สำเร็จ:", error);
+  }
+}
+    // ========== ฟังก์ชันวาดกราฟ ==========
+    // --- กราฟเส้น ---
+    function lineChart(ctx, title, labels, successData, repairData) {
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            { label: "สำเร็จ", data: successData, borderColor: "#38bdf8", tension: 0.3, fill: false },
+            { label: "ส่งซ่อม", data: repairData, borderColor: "#fbbf24", tension: 0.3, fill: false },
+          ]
+        },
+        options: {
+          responsive: true,
+          devicePixelRatio: 2,
+          maintainAspectRatio: false,
+          layout: { padding: 0 },
+          plugins: {
+            legend: { position: "top", labels: { color: "#ffffff" } },
+            title: { display: false },
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: "จำนวนแจ้งปัญหา" },
+            ticks: { color: "#e2e8f0" }, title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } },
+            x: { title: { display: true, text: "เดือน" },  ticks: { color: "#e2e8f0" },
+            title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } }
+          },
+          tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)", // พื้นหลัง tooltip
+      titleFont: { size: 16, weight: "bold" }, // ขนาดชื่อใหญ่
+      bodyFont: { size: 18 }, // ขนาดข้อความหลัก
+      padding: 12, // ระยะห่างภายใน tooltip
+      boxPadding: 6, // ระยะระหว่างสีและข้อความ
+      displayColors: true, // แสดงช่องสีด้านหน้า label
+      callbacks: {
+        label: function (ctx) {
+          return ` ${ctx.formattedValue} ครั้ง `;
+        },
+      },
+    },
+       // 🔥 เพิ่มส่วนนี้เข้ามา
+      interaction: {
+        mode: "nearest", // ตรวจจับจุดที่ใกล้สุด
+        axis: "x",
+        intersect: false // ไม่ต้องให้ชี้โดนจุดตรงๆ ก็ทำงาน
+      },
+      elements: {
+        point: {
+          radius: 5,        // ขนาดจุด (ปกติ 3)
+          hoverRadius: 8,   // ขนาดตอน hover
+          hitRadius: 20,    // ระยะตรวจจับของเมาส์รอบๆ จุด
+          borderWidth: 2,
+        },
+        line: {
+          tension: 0.3,
+          borderWidth: 3
+        }
+      }
+        }
+      });
+    }
+
+    // --- กราฟแท่งซ้อน ---
+    function stackedBar(ctx, title, dataArr) {
+      const labels = dataArr.map(([key]) => key);
+      const success = dataArr.map(([_, val]) => val["สำเร็จ"]);
+      const repair = dataArr.map(([_, val]) => val["ส่งซ่อม"]);
+
+      const chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [
+      { label: "สำเร็จ", data: success, backgroundColor: "#38bdf8" },
+      { label: "ส่งซ่อม", data: repair, backgroundColor: "#fbbf24" }
+    ],
+  },
+  options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      devicePixelRatio: 2,
+      label: { padding: 0 },
+      plugins: {
+        legend: { position: "top", labels: { color: "#ffffff" } },
+        title: { display: false },
+        tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)", // พื้นหลัง tooltip
+      titleFont: { size: 16, weight: "bold" }, // ขนาดชื่อใหญ่
+      bodyFont: { size: 18 }, // ขนาดข้อความหลัก
+      padding: 12, // ระยะห่างภายใน tooltip
+      boxPadding: 6, // ระยะระหว่างสีและข้อความ
+      displayColors: true, // แสดงช่องสีด้านหน้า label
+      callbacks: {
+        label: function (ctx) {
+          return ` ${ctx.formattedValue} ครั้ง `;
+        },
+      },
+    },
+      },
+      scales: {
+        x: { stacked: true,  ticks: { color: "#e2e8f0" },
+        title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } },
+        y: { stacked: true, beginAtZero: true, ticks: { color: "#e2e8f0" },
+        title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" } },
+      },
+        onClick(event, elements, chartInstance) {
+            const points = chartInstance.getElementsAtEventForMode(
+              event,
+              "nearest",
+              { intersect: true },
+              true
+            );
+
+            if (points.length > 0) {
+              const datasetIndex = points[0].datasetIndex;
+              const clickedDataset = chartInstance.data.datasets[datasetIndex];
+
+              // toggle ซ่อน/แสดงชุดข้อมูล
+              const visibleCount = chartInstance.data.datasets.filter(ds => !ds.hidden).length;
+              chartInstance.data.datasets.forEach((ds, i) => {
+                ds.hidden = visibleCount === 1 ? false : i !== datasetIndex;
+              });
+
+              chartInstance.update();
+          }
+        },
+      }
+    });
+    }
+    // ===== กราฟวงกลม: อาการที่พบบ่อยสุด (แยกสถานะ) =====
+function pieChart(successCtx, repairCtx, dataArr) {
+  const labels = dataArr.map(([key]) => key);
+  const success = dataArr.map(([_, val]) => val["สำเร็จ"]);
+  const repair = dataArr.map(([_, val]) => val["ส่งซ่อม"]);
+
+  // กราฟวงกลม “สำเร็จ”
+  new Chart(successCtx, {
+    type: "pie",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "สำเร็จ",
+          data: success,
+          backgroundColor: ["#3b82f6", "#60a5fa", "#93c5fd", "#2563eb", "#1e40af"],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { top: 0, bottom: 10 } },
+      plugins: {
+        legend: { position: "bottom", labels: { color: "#ffffff" } },
+        title: { display: false },
+        tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)", // พื้นหลัง tooltip
+      titleFont: { size: 16, weight: "bold" }, // ขนาดชื่อใหญ่
+      bodyFont: { size: 18 }, // ขนาดข้อความหลัก
+      padding: 12, // ระยะห่างภายใน tooltip
+      boxPadding: 6, // ระยะระหว่างสีและข้อความ
+      displayColors: true, // แสดงช่องสีด้านหน้า label
+      callbacks: {
+        label: function (ctx) {
+          return ` ${ctx.formattedValue} ครั้ง `;
+        },
+      },
+    },
+      },
+      //cutout: "50%",
+    },
+  });
+  // ✅ กราฟแท่งแนวนอน “ส่งซ่อม”
+new Chart(repairCtx, {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [
+      {
+        label: "จำนวนครั้งที่ส่งซ่อม",
+        data: repair,
+        backgroundColor: ["#facc15", "#fbbf24", "#f59e0b", "#d97706", "#b45309"],
+        borderRadius: 6, // มุมโค้งนิดๆ ให้ดูนุ่มขึ้น
+      },
+    ],
+  },
+  options: {
+    indexAxis: "y", // 🔥 ทำให้แท่งเป็นแนวนอน
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { top: 0, bottom: 10 } },
+    plugins: {
+      legend: { display: false, labels: { color: "#ffffff" } },
+      title: { display: false },
+      tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)", // พื้นหลัง tooltip
+      titleFont: { size: 16, weight: "bold" }, // ขนาดชื่อใหญ่
+      bodyFont: { size: 18 }, // ขนาดข้อความหลัก
+      padding: 12, // ระยะห่างภายใน tooltip
+      boxPadding: 6, // ระยะระหว่างสีและข้อความ
+      displayColors: true, // แสดงช่องสีด้านหน้า label
+      callbacks: {
+        label: function (ctx) {
+          return ` ${ctx.formattedValue} ครั้ง `;
+        },
+      },
+    },
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: { stepSize: 1 }, title: { display: true, text: "จำนวนครั้ง" }, grid: { color: "#eee" },
+        ticks: { color: "#e2e8f0" }, title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" }
+      },
+      y: {
+        title: { display: true, text: "อาการ" },
+        ticks: {
+          autoSkip: false, // ✅ แสดงชื่ออาการทั้งหมด
+          font: { size: 12 },
+        },
+        ticks: { color: "#e2e8f0" }, title: { color: "#ffffff" }, grid: { color: "rgba(255,255,255,0.1)" }
+      },
+    },
+    layout: {
+      padding: 20,
+    },
+  },
+});
+}
+  document.addEventListener("DOMContentLoaded", loadStatistics);
+
 </script>
 </body>
 </html>
